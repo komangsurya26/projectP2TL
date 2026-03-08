@@ -50,7 +50,7 @@ export default function Sidebar() {
         }}
       >
         <div style={{ fontSize: "0.75rem", color: "rgba(255,255,255,0.35)" }}>
-          P2TL Analytics v1.0
+          Analisa TO P2TL
         </div>
         <div
           style={{
@@ -59,7 +59,7 @@ export default function Sidebar() {
             marginTop: "0.25rem",
           }}
         >
-          © 2026 PLN Indonesia
+          © 2026 EPM UID BALI 
         </div>
       </div>
     </aside>

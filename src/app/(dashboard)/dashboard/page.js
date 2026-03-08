@@ -17,7 +17,7 @@ import {
 export default function DashboardPage() {
   const summaryCards = [
     {
-      label: "Total Customers",
+      label: "Jumlah Pelanggan",
       value: "12,458",
       trend: "+3.2%",
       trendDir: "up",
@@ -25,7 +25,7 @@ export default function DashboardPage() {
       icon: Users,
     },
     {
-      label: "Anomalies Detected",
+      label: "Jumlah Deteksi Anomali",
       value: "156",
       trend: "+12.5%",
       trendDir: "up",
@@ -33,7 +33,7 @@ export default function DashboardPage() {
       icon: AlertTriangle,
     },
     {
-      label: "Inspections This Month",
+      label: "Jumlah Inspeksi Bulan Ini",
       value: "342",
       trend: "+8.1%",
       trendDir: "up",
@@ -41,8 +41,8 @@ export default function DashboardPage() {
       icon: ClipboardCheck,
     },
     {
-      label: "Revenue at Risk",
-      value: "Rp 2.8B",
+      label: "Potensi Losses (Rp.) ",
+      value: "Rp 2.8M",
       trend: "-5.3%",
       trendDir: "down",
       color: "orange",
@@ -54,7 +54,7 @@ export default function DashboardPage() {
     <>
       <div className="page-header">
         <h1>Dashboard Overview</h1>
-        <p>Monitor P2TL inspection results and energy analytics</p>
+        <p>Hasil monitoring inspeksi P2TL dan analisa energi</p>
       </div>
 
       <div className="summary-cards">
