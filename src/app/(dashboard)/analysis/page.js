@@ -11,6 +11,8 @@ import {
 } from "lucide-react";
 import { customers } from "@/data/mockData";
 import CustomerDetail from "@/components/CustomerDetail";
+import { Badge } from "@/components/ui/Badge";
+import { Card } from "@/components/ui/Card";
 
 export default function AnalysisPage() {
   const [search, setSearch] = useState("");
@@ -61,7 +63,7 @@ export default function AnalysisPage() {
 
   const SortIcon = ({ field }) => {
     if (sortField !== field)
-      return <ChevronUp size={12} style={{ opacity: 0.3 }} />;
+      return <ChevronUp size={12} className="opacity-30" />;
     return sortDir === "asc" ? (
       <ChevronUp size={12} />
     ) : (
@@ -81,14 +83,18 @@ export default function AnalysisPage() {
 
   return (
     <>
-      <div className="page-header">
-        <h1>Data Analysis</h1>
-        <p>Analyze P2TL inspection data and customer risk indicators</p>
+      <div className="mb-8">
+        <h1 className="text-2xl font-bold text-dark-blue mb-1">
+          Data Analysis
+        </h1>
+        <p className="text-sm text-gray-500">
+          Analyze P2TL inspection data and customer risk indicators
+        </p>
       </div>
 
-      <div className="table-toolbar">
-        <div className="table-search">
-          <Search size={18} />
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+        <div className="flex items-center gap-2 px-4 py-2 bg-white border-[1.5px] border-gray-200 rounded-lg w-full md:min-w-[300px] md:w-auto transition-colors focus-within:border-electric-blue focus-within:ring-[3px] focus-within:ring-electric-blue/10">
+          <Search size={18} className="text-gray-400 min-w-[18px]" />
           <input
             type="text"
             placeholder="Search by ID or name..."
@@ -97,11 +103,13 @@ export default function AnalysisPage() {
               setSearch(e.target.value);
               setPage(1);
             }}
+            className="border-none bg-transparent text-sm text-gray-700 outline-none w-full font-sans"
           />
         </div>
-        <div className="table-filters">
+
+        <div className="flex flex-wrap items-center gap-3">
           <select
-            className="filter-select"
+            className="px-3 py-2 border-[1.5px] border-gray-200 rounded-lg text-sm font-sans text-gray-600 bg-white cursor-pointer outline-none focus:border-electric-blue flex-1 md:flex-none"
             value={riskFilter}
             onChange={(e) => {
               setRiskFilter(e.target.value);
@@ -114,7 +122,7 @@ export default function AnalysisPage() {
             <option value="high">High</option>
           </select>
           <select
-            className="filter-select"
+            className="px-3 py-2 border-[1.5px] border-gray-200 rounded-lg text-sm font-sans text-gray-600 bg-white cursor-pointer outline-none focus:border-electric-blue flex-1 md:flex-none"
             value={resultFilter}
             onChange={(e) => {
               setResultFilter(e.target.value);
@@ -127,7 +135,7 @@ export default function AnalysisPage() {
             <option value="Anomaly">Anomaly</option>
           </select>
           <select
-            className="filter-select"
+            className="px-3 py-2 border-[1.5px] border-gray-200 rounded-lg text-sm font-sans text-gray-600 bg-white cursor-pointer outline-none focus:border-electric-blue min-w-[100px]"
             value={perPage}
             onChange={(e) => {
               setPerPage(Number(e.target.value));
@@ -141,97 +149,137 @@ export default function AnalysisPage() {
         </div>
       </div>
 
-      <div className="data-table-wrapper">
-        <table className="data-table">
-          <thead>
-            <tr>
-              {columns.map((col) => (
-                <th key={col.key} onClick={() => handleSort(col.key)}>
-                  {col.label} <SortIcon field={col.key} />
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {paged.map((customer) => (
-              <tr
-                key={customer.id}
-                onClick={() => setSelectedCustomer(customer)}
-              >
-                <td
-                  style={{
-                    fontWeight: 600,
-                    color: "var(--color-electric-blue)",
-                  }}
-                >
-                  {customer.id}
-                </td>
-                <td>{customer.name}</td>
-                <td>{customer.tariff}</td>
-                <td>{customer.power}</td>
-                <td>
-                  <span
-                    className={`badge ${customer.result === "Anomaly" ? "high" : customer.result === "Suspect" ? "medium" : "normal"}`}
+      <Card className="overflow-hidden">
+        <div className="overflow-x-auto w-full">
+          <table className="w-full min-w-[800px] border-collapse">
+            <thead>
+              <tr>
+                {columns.map((col) => (
+                  <th
+                    key={col.key}
+                    onClick={() => handleSort(col.key)}
+                    className="px-4 py-3.5 text-left text-xs font-bold uppercase tracking-wider text-gray-500 bg-gray-50 border-b-2 border-gray-200 cursor-pointer select-none hover:text-electric-blue whitespace-nowrap"
                   >
-                    <span className="badge-dot"></span>
-                    {customer.result}
-                  </span>
-                </td>
-                <td>
-                  <span className={`badge ${customer.risk}`}>
-                    <span className="badge-dot"></span>
-                    {customer.risk.charAt(0).toUpperCase() +
-                      customer.risk.slice(1)}
-                  </span>
-                </td>
-                <td>{customer.lastInspection}</td>
+                    <div className="flex items-center gap-1.5">
+                      {col.label} <SortIcon field={col.key} />
+                    </div>
+                  </th>
+                ))}
               </tr>
-            ))}
-          </tbody>
-        </table>
-        <div className="pagination">
-          <div className="pagination-info">
+            </thead>
+            <tbody>
+              {paged.map((customer) => (
+                <tr
+                  key={customer.id}
+                  onClick={() => setSelectedCustomer(customer)}
+                  className="transition-colors cursor-pointer hover:bg-electric-blue/4"
+                >
+                  <td className="px-4 py-3.5 text-sm border-b border-gray-100 font-semibold text-electric-blue">
+                    {customer.id}
+                  </td>
+                  <td className="px-4 py-3.5 text-sm text-gray-700 border-b border-gray-100">
+                    {customer.name}
+                  </td>
+                  <td className="px-4 py-3.5 text-sm text-gray-700 border-b border-gray-100">
+                    {customer.tariff}
+                  </td>
+                  <td className="px-4 py-3.5 text-sm text-gray-700 border-b border-gray-100">
+                    {customer.power}
+                  </td>
+                  <td className="px-4 py-3.5 text-sm border-b border-gray-100">
+                    <Badge
+                      variant={
+                        customer.result === "Anomaly"
+                          ? "danger"
+                          : customer.result === "Suspect"
+                            ? "warning"
+                            : "primary"
+                      }
+                    >
+                      {customer.result}
+                    </Badge>
+                  </td>
+                  <td className="px-4 py-3.5 text-sm border-b border-gray-100">
+                    <Badge
+                      variant={
+                        customer.risk === "high"
+                          ? "danger"
+                          : customer.risk === "medium"
+                            ? "warning"
+                            : "success"
+                      }
+                    >
+                      {customer.risk.charAt(0).toUpperCase() +
+                        customer.risk.slice(1)}
+                    </Badge>
+                  </td>
+                  <td className="px-4 py-3.5 text-sm text-gray-700 border-b border-gray-100">
+                    {customer.lastInspection}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        {/* Pagination */}
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 p-4 border-t border-gray-100 bg-white">
+          <div className="text-sm text-gray-500">
             Showing {(page - 1) * perPage + 1}–
             {Math.min(page * perPage, filtered.length)} of {filtered.length}{" "}
             results
           </div>
-          <div className="pagination-controls">
+
+          <div className="flex items-center gap-1">
             <button
-              className="pagination-btn"
+              className="w-9 h-9 rounded-md border border-gray-200 bg-white text-gray-600 flex items-center justify-center cursor-pointer transition-colors font-sans text-sm font-medium hover:not-disabled:border-electric-blue hover:not-disabled:text-electric-blue disabled:opacity-40 disabled:cursor-not-allowed"
               disabled={page === 1}
               onClick={() => setPage(1)}
             >
               <ChevronsLeft size={16} />
             </button>
             <button
-              className="pagination-btn"
+              className="w-9 h-9 rounded-md border border-gray-200 bg-white text-gray-600 flex items-center justify-center cursor-pointer transition-colors font-sans text-sm font-medium hover:not-disabled:border-electric-blue hover:not-disabled:text-electric-blue disabled:opacity-40 disabled:cursor-not-allowed"
               disabled={page === 1}
               onClick={() => setPage((p) => p - 1)}
             >
               <ChevronLeft size={16} />
             </button>
-            {Array.from({ length: Math.min(totalPages, 5) }, (_, i) => {
-              const p = Math.max(1, Math.min(page - 2, totalPages - 4)) + i;
-              if (p > totalPages) return null;
-              return (
-                <button
-                  key={p}
-                  className={`pagination-btn${p === page ? " active" : ""}`}
-                  onClick={() => setPage(p)}
-                >
-                  {p}
-                </button>
-              );
-            })}
+
+            <div className="hidden sm:flex items-center gap-1 mx-1">
+              {Array.from({ length: Math.min(totalPages, 5) }, (_, i) => {
+                const p = Math.max(1, Math.min(page - 2, totalPages - 4)) + i;
+                if (p > totalPages) return null;
+                return (
+                  <button
+                    key={p}
+                    className={`w-9 h-9 rounded-md border flex items-center justify-center cursor-pointer transition-colors font-sans text-sm font-medium
+                      ${
+                        p === page
+                          ? "bg-electric-blue border-electric-blue text-white"
+                          : "border-gray-200 bg-white text-gray-600 hover:border-electric-blue hover:text-electric-blue"
+                      }`}
+                    onClick={() => setPage(p)}
+                  >
+                    {p}
+                  </button>
+                );
+              })}
+            </div>
+
+            <span className="sm:hidden text-sm font-medium px-2">
+              Page {page} of {totalPages}
+            </span>
+
             <button
-              className="pagination-btn"
+              className="w-9 h-9 rounded-md border border-gray-200 bg-white text-gray-600 flex items-center justify-center cursor-pointer transition-colors font-sans text-sm font-medium hover:not-disabled:border-electric-blue hover:not-disabled:text-electric-blue disabled:opacity-40 disabled:cursor-not-allowed"
               disabled={page === totalPages}
               onClick={() => setPage((p) => p + 1)}
             >
               <ChevronRight size={16} />
             </button>
             <button
-              className="pagination-btn"
+              className="w-9 h-9 rounded-md border border-gray-200 bg-white text-gray-600 flex items-center justify-center cursor-pointer transition-colors font-sans text-sm font-medium hover:not-disabled:border-electric-blue hover:not-disabled:text-electric-blue disabled:opacity-40 disabled:cursor-not-allowed"
               disabled={page === totalPages}
               onClick={() => setPage(totalPages)}
             >
@@ -239,7 +287,7 @@ export default function AnalysisPage() {
             </button>
           </div>
         </div>
-      </div>
+      </Card>
 
       {selectedCustomer && (
         <CustomerDetail

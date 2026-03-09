@@ -1,162 +1,135 @@
 "use client";
-import { User, Bell, Shield, Database, Globe } from "lucide-react";
+import { User, Bell, Database } from "lucide-react";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/Card";
+import { Button } from "@/components/ui/Button";
 
 export default function SettingsPage() {
   return (
     <>
-      <div className="page-header">
-        <h1>Settings</h1>
-        <p>Manage your account and application preferences</p>
+      <div className="mb-8">
+        <h1 className="text-2xl font-bold text-dark-blue mb-1">Settings</h1>
+        <p className="text-sm text-gray-500">
+          Manage your account and application preferences
+        </p>
       </div>
 
-      <div style={{ display: "grid", gap: "1.5rem" }}>
+      <div className="grid gap-6">
         {/* Profile */}
-        <div className="card">
-          <div className="card-header">
-            <h3>
-              <User
-                size={18}
-                style={{
-                  display: "inline",
-                  marginRight: "0.5rem",
-                  verticalAlign: "middle",
-                }}
-              />
-              Profile Settings
-            </h3>
-          </div>
-          <div className="card-body">
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "1fr 1fr",
-                gap: "1.25rem",
-                maxWidth: "600px",
-              }}
-            >
-              <div className="form-group">
-                <label>Full Name</label>
-                <input className="form-input" defaultValue="Admin Staff" />
+        <Card>
+          <CardHeader>
+            <CardTitle>
+              <div className="flex items-center gap-2">
+                <User size={18} />
+                Profile Settings
               </div>
-              <div className="form-group">
-                <label>Email</label>
-                <input className="form-input" defaultValue="admin@pln.co.id" />
-              </div>
-              <div className="form-group">
-                <label>Role</label>
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5 max-w-3xl">
+              <div className="flex flex-col gap-2">
+                <label className="text-sm font-semibold text-gray-600">
+                  Full Name
+                </label>
                 <input
-                  className="form-input"
+                  className="w-full px-4 py-2.5 border-[1.5px] border-gray-200 rounded-lg text-sm font-sans text-gray-700 bg-white outline-none transition-all focus:border-electric-blue focus:shadow-[0_0_0_3px_rgba(33,150,243,0.12)]"
+                  defaultValue="Admin Staff"
+                />
+              </div>
+              <div className="flex flex-col gap-2">
+                <label className="text-sm font-semibold text-gray-600">
+                  Email
+                </label>
+                <input
+                  className="w-full px-4 py-2.5 border-[1.5px] border-gray-200 rounded-lg text-sm font-sans text-gray-700 bg-white outline-none transition-all focus:border-electric-blue focus:shadow-[0_0_0_3px_rgba(33,150,243,0.12)]"
+                  defaultValue="admin@pln.co.id"
+                />
+              </div>
+              <div className="flex flex-col gap-2">
+                <label className="text-sm font-semibold text-gray-600">
+                  Role
+                </label>
+                <input
+                  className="w-full px-4 py-2.5 border-[1.5px] border-gray-200 rounded-lg text-sm font-sans text-gray-700 bg-gray-50 outline-none select-none cursor-default"
                   defaultValue="Senior Analyst"
                   readOnly
-                  style={{ background: "var(--color-gray-50)" }}
                 />
               </div>
-              <div className="form-group">
-                <label>Department</label>
-                <input className="form-input" defaultValue="P2TL Division" />
+              <div className="flex flex-col gap-2">
+                <label className="text-sm font-semibold text-gray-600">
+                  Department
+                </label>
+                <input
+                  className="w-full px-4 py-2.5 border-[1.5px] border-gray-200 rounded-lg text-sm font-sans text-gray-700 bg-white outline-none transition-all focus:border-electric-blue focus:shadow-[0_0_0_3px_rgba(33,150,243,0.12)]"
+                  defaultValue="P2TL Division"
+                />
               </div>
             </div>
-            <button className="btn btn-primary" style={{ marginTop: "1rem" }}>
-              Save Changes
-            </button>
-          </div>
-        </div>
+            <Button className="mt-6">Save Changes</Button>
+          </CardContent>
+        </Card>
 
         {/* Notifications */}
-        <div className="card">
-          <div className="card-header">
-            <h3>
-              <Bell
-                size={18}
-                style={{
-                  display: "inline",
-                  marginRight: "0.5rem",
-                  verticalAlign: "middle",
-                }}
-              />
-              Notification Preferences
-            </h3>
-          </div>
-          <div className="card-body">
-            {[
-              "Anomaly Detection Alerts",
-              "Inspection Report Ready",
-              "Weekly Summary Email",
-              "System Maintenance Notices",
-            ].map((label, i) => (
-              <label
-                key={i}
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "0.75rem",
-                  padding: "0.75rem 0",
-                  borderBottom:
-                    i < 3 ? "1px solid var(--color-gray-100)" : "none",
-                  cursor: "pointer",
-                  fontSize: "0.875rem",
-                }}
-              >
-                <input
-                  type="checkbox"
-                  defaultChecked={i < 2}
-                  style={{
-                    width: "18px",
-                    height: "18px",
-                    accentColor: "var(--color-electric-blue)",
-                  }}
-                />
-                {label}
-              </label>
-            ))}
-          </div>
-        </div>
+        <Card>
+          <CardHeader>
+            <CardTitle>
+              <div className="flex items-center gap-2">
+                <Bell size={18} />
+                Notification Preferences
+              </div>
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="p-0 sm:p-0">
+            <div className="flex flex-col">
+              {[
+                "Anomaly Detection Alerts",
+                "Inspection Report Ready",
+                "Weekly Summary Email",
+                "System Maintenance Notices",
+              ].map((label, i) => (
+                <label
+                  key={i}
+                  className={`flex items-center gap-3 px-5 sm:px-6 py-4 cursor-pointer text-sm text-gray-700 hover:bg-gray-50 transition-colors ${
+                    i < 3 ? "border-b border-gray-100" : ""
+                  }`}
+                >
+                  <input
+                    type="checkbox"
+                    defaultChecked={i < 2}
+                    className="w-4 h-4 accent-electric-blue cursor-pointer"
+                  />
+                  {label}
+                </label>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
 
         {/* System */}
-        <div className="card">
-          <div className="card-header">
-            <h3>
-              <Database
-                size={18}
-                style={{
-                  display: "inline",
-                  marginRight: "0.5rem",
-                  verticalAlign: "middle",
-                }}
-              />
-              System Information
-            </h3>
-          </div>
-          <div className="card-body">
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "auto 1fr",
-                gap: "0.75rem 2rem",
-                fontSize: "0.875rem",
-              }}
-            >
-              <span style={{ color: "var(--color-gray-500)", fontWeight: 600 }}>
-                Version
-              </span>
-              <span>P2TL Analytics v1.0.0</span>
-              <span style={{ color: "var(--color-gray-500)", fontWeight: 600 }}>
-                Last Updated
-              </span>
-              <span>March 2026</span>
-              <span style={{ color: "var(--color-gray-500)", fontWeight: 600 }}>
-                Database
-              </span>
-              <span>PostgreSQL 16.2</span>
-              <span style={{ color: "var(--color-gray-500)", fontWeight: 600 }}>
-                Environment
-              </span>
-              <span style={{ color: "var(--color-success)", fontWeight: 600 }}>
-                Production
-              </span>
+        <Card>
+          <CardHeader>
+            <CardTitle>
+              <div className="flex items-center gap-2">
+                <Database size={18} />
+                System Information
+              </div>
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-[auto_1fr] gap-x-8 gap-y-4 text-sm max-w-md">
+              <span className="text-gray-500 font-semibold">Version</span>
+              <span className="text-gray-800">P2TL Analytics v1.0.0</span>
+
+              <span className="text-gray-500 font-semibold">Last Updated</span>
+              <span className="text-gray-800">March 2026</span>
+
+              <span className="text-gray-500 font-semibold">Database</span>
+              <span className="text-gray-800">PostgreSQL 16.2</span>
+
+              <span className="text-gray-500 font-semibold">Environment</span>
+              <span className="text-success font-semibold">Production</span>
             </div>
-          </div>
-        </div>
+          </CardContent>
+        </Card>
       </div>
     </>
   );

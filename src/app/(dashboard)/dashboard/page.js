@@ -14,6 +14,36 @@ import {
   recentActivities,
 } from "@/data/mockData";
 
+const cardColors = {
+  blue: {
+    accent: "from-electric-blue to-accent",
+    iconBg: "bg-electric-blue/10",
+    iconText: "text-electric-blue",
+  },
+  red: {
+    accent: "from-danger to-red-400",
+    iconBg: "bg-danger/10",
+    iconText: "text-danger",
+  },
+  green: {
+    accent: "from-success to-emerald-400",
+    iconBg: "bg-success/10",
+    iconText: "text-success",
+  },
+  orange: {
+    accent: "from-warning to-amber-300",
+    iconBg: "bg-warning/10",
+    iconText: "text-warning",
+  },
+};
+
+const dotColors = {
+  red: "bg-danger",
+  green: "bg-success",
+  blue: "bg-electric-blue",
+  orange: "bg-warning",
+};
+
 export default function DashboardPage() {
   const summaryCards = [
     {
@@ -41,7 +71,7 @@ export default function DashboardPage() {
       icon: ClipboardCheck,
     },
     {
-      label: "Potensi Losses (Rp.) ",
+      label: "Potensi Losses (Rp.)",
       value: "Rp 2.8M",
       trend: "-5.3%",
       trendDir: "down",
@@ -52,74 +82,104 @@ export default function DashboardPage() {
 
   return (
     <>
-      <div className="page-header">
-        <h1>Dashboard Overview</h1>
-        <p>Hasil monitoring inspeksi P2TL dan analisa energi</p>
+      <div className="mb-8">
+        <h1 className="text-2xl font-bold text-dark-blue mb-1">
+          Dashboard Overview
+        </h1>
+        <p className="text-sm text-gray-500">
+          Hasil monitoring inspeksi P2TL dan analisa energi
+        </p>
       </div>
 
-      <div className="summary-cards">
-        {summaryCards.map((card, i) => (
-          <div key={i} className={`summary-card ${card.color}`}>
-            <div className={`summary-card-icon ${card.color}`}>
-              <card.icon size={24} />
-            </div>
-            <div className="summary-card-value">{card.value}</div>
-            <div className="summary-card-label">{card.label}</div>
-            <div className={`summary-card-trend ${card.trendDir}`}>
-              {card.trendDir === "up" ? (
-                <TrendingUp size={14} />
-              ) : (
-                <TrendingDown size={14} />
-              )}
-              {card.trend} from last month
-            </div>
-          </div>
-        ))}
-      </div>
-
-      <div className="charts-grid">
-        <div className="chart-card">
-          <div className="card-header">
-            <h3>Monthly Energy Consumption Trend</h3>
-            <span
-              style={{ fontSize: "0.75rem", color: "var(--color-gray-400)" }}
+      {/* Summary Cards */}
+      <div className="grid grid-cols-4 gap-6 mb-8 max-2xl:grid-cols-2 max-md:grid-cols-1">
+        {summaryCards.map((card, i) => {
+          const c = cardColors[card.color];
+          return (
+            <div
+              key={i}
+              className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm hover:shadow-lg hover:shadow-electric-blue/10 transition-all hover:-translate-y-0.5 relative overflow-hidden"
             >
-              2026
-            </span>
+              <div
+                className={`absolute top-0 left-0 right-0 h-[3px] bg-linear-to-r ${c.accent}`}
+              ></div>
+              <div
+                className={`w-12 h-12 rounded-lg flex items-center justify-center mb-4 ${c.iconBg} ${c.iconText}`}
+              >
+                <card.icon size={24} />
+              </div>
+              <div className="text-3xl font-extrabold text-dark-blue leading-tight">
+                {card.value}
+              </div>
+              <div className="text-sm text-gray-500 mt-1">{card.label}</div>
+              <div
+                className={`flex items-center gap-1 mt-3 text-xs font-semibold ${card.trendDir === "up" ? "text-success" : "text-danger"}`}
+              >
+                {card.trendDir === "up" ? (
+                  <TrendingUp size={14} />
+                ) : (
+                  <TrendingDown size={14} />
+                )}
+                {card.trend} from last month
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Charts */}
+      <div className="grid grid-cols-[2fr_1fr] gap-6 mb-8 max-2xl:grid-cols-1">
+        <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+          <div className="px-6 py-5 border-b border-gray-100 flex items-center justify-between">
+            <h3 className="text-base font-semibold text-dark-blue">
+              Monthly Energy Consumption Trend
+            </h3>
+            <span className="text-xs text-gray-400">2026</span>
           </div>
-          <div className="card-body">
+          <div className="p-6">
             <EnergyLineChart data={dashboardTrendData} />
           </div>
         </div>
-        <div className="chart-card">
-          <div className="card-header">
-            <h3>Risk Distribution</h3>
-            <span
-              style={{ fontSize: "0.75rem", color: "var(--color-gray-400)" }}
-            >
-              20 customers
-            </span>
+        <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+          <div className="px-6 py-5 border-b border-gray-100 flex items-center justify-between">
+            <h3 className="text-base font-semibold text-dark-blue">
+              Risk Distribution
+            </h3>
+            <span className="text-xs text-gray-400">20 customers</span>
           </div>
-          <div className="card-body">
+          <div className="p-6">
             <RiskBarChart data={riskDistribution} />
           </div>
         </div>
       </div>
 
-      <div className="card">
-        <div className="card-header">
-          <h3>Recent Activity</h3>
-          <a href="#" style={{ fontSize: "0.8125rem", fontWeight: 600 }}>
+      {/* Recent Activity */}
+      <div className="bg-white rounded-xl border border-gray-200 shadow-sm">
+        <div className="px-6 py-5 border-b border-gray-100 flex items-center justify-between">
+          <h3 className="text-base font-semibold text-dark-blue">
+            Recent Activity
+          </h3>
+          <a
+            href="#"
+            className="text-sm font-semibold text-electric-blue no-underline hover:underline"
+          >
             View All
           </a>
         </div>
-        <div className="activity-list">
+        <div className="flex flex-col">
           {recentActivities.map((item, i) => (
-            <div key={i} className="activity-item">
-              <div className={`activity-dot ${item.color}`}></div>
+            <div
+              key={i}
+              className="flex items-start gap-4 px-6 py-4 border-b border-gray-100 last:border-b-0 hover:bg-gray-50 transition-colors"
+            >
+              <div
+                className={`w-2 h-2 rounded-full mt-1.5 min-w-2 ${dotColors[item.color]}`}
+              ></div>
               <div>
-                <div className="activity-text">{item.text}</div>
-                <div className="activity-time">{item.time}</div>
+                <div className="text-sm text-gray-700 leading-relaxed">
+                  {item.text}
+                </div>
+                <div className="text-xs text-gray-400 mt-0.5">{item.time}</div>
               </div>
             </div>
           ))}

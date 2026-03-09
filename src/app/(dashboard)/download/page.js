@@ -1,6 +1,8 @@
 "use client";
 import { useState } from "react";
 import { Download, FileSpreadsheet, Calendar } from "lucide-react";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/Card";
+import { Button } from "@/components/ui/Button";
 
 const downloadHistory = [
   {
@@ -71,21 +73,27 @@ export default function DownloadPage() {
 
   return (
     <>
-      <div className="page-header">
-        <h1>Download Reports</h1>
-        <p>Download processed analysis results and inspection reports</p>
+      <div className="mb-8">
+        <h1 className="text-2xl font-bold text-dark-blue mb-1">
+          Download Reports
+        </h1>
+        <p className="text-sm text-gray-500">
+          Download processed analysis results and inspection reports
+        </p>
       </div>
 
-      <div className="card" style={{ marginBottom: "2rem" }}>
-        <div className="card-header">
-          <h3>Generate Report</h3>
-        </div>
-        <div className="card-body">
-          <div className="download-filters">
-            <div className="download-filter-group">
-              <label>Report Type</label>
+      <Card className="mb-8">
+        <CardHeader>
+          <CardTitle>Generate Report</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="flex flex-col md:flex-row md:items-end gap-5 flex-wrap">
+            <div className="flex flex-col gap-2 w-full md:w-auto">
+              <label className="text-[13px] font-semibold text-gray-600">
+                Report Type
+              </label>
               <select
-                className="filter-select"
+                className="px-3 py-2 border-[1.5px] border-gray-200 rounded-lg text-sm font-sans text-gray-600 bg-white cursor-pointer outline-none focus:border-electric-blue w-full md:w-48"
                 value={type}
                 onChange={(e) => setType(e.target.value)}
               >
@@ -96,101 +104,109 @@ export default function DownloadPage() {
                 ))}
               </select>
             </div>
-            <div className="download-filter-group">
-              <label>Month</label>
-              <select
-                className="filter-select"
-                value={month}
-                onChange={(e) => setMonth(e.target.value)}
-              >
-                {months.map((m) => (
-                  <option key={m} value={m}>
-                    {m}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div className="download-filter-group">
-              <label>Year</label>
-              <select
-                className="filter-select"
-                value={year}
-                onChange={(e) => setYear(Number(e.target.value))}
-              >
-                {years.map((y) => (
-                  <option key={y} value={y}>
-                    {y}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <button className="btn btn-primary" onClick={handleDownload}>
-              <Download size={16} /> Download Report
-            </button>
-          </div>
-        </div>
-      </div>
 
-      <div className="card">
-        <div className="card-header">
-          <h3>Recent Downloads</h3>
-        </div>
-        <div style={{ overflowX: "auto" }}>
-          <table className="history-table">
+            <div className="flex gap-5 w-full md:w-auto">
+              <div className="flex flex-col gap-2 flex-1 md:flex-none">
+                <label className="text-[13px] font-semibold text-gray-600">
+                  Month
+                </label>
+                <select
+                  className="px-3 py-2 border-[1.5px] border-gray-200 rounded-lg text-sm font-sans text-gray-600 bg-white cursor-pointer outline-none focus:border-electric-blue w-full md:w-32"
+                  value={month}
+                  onChange={(e) => setMonth(e.target.value)}
+                >
+                  {months.map((m) => (
+                    <option key={m} value={m}>
+                      {m}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="flex flex-col gap-2 flex-1 md:flex-none">
+                <label className="text-[13px] font-semibold text-gray-600">
+                  Year
+                </label>
+                <select
+                  className="px-3 py-2 border-[1.5px] border-gray-200 rounded-lg text-sm font-sans text-gray-600 bg-white cursor-pointer outline-none focus:border-electric-blue w-full md:w-28"
+                  value={year}
+                  onChange={(e) => setYear(Number(e.target.value))}
+                >
+                  {years.map((y) => (
+                    <option key={y} value={y}>
+                      {y}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
+            <Button
+              onClick={handleDownload}
+              className="w-full md:w-auto mt-2 md:mt-0"
+            >
+              <Download size={16} /> Download Report
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Recent Downloads</CardTitle>
+        </CardHeader>
+        <div className="overflow-x-auto w-full">
+          <table className="w-full min-w-[600px] border-collapse">
             <thead>
               <tr>
-                <th>File Name</th>
-                <th>Type</th>
-                <th>Date</th>
-                <th>Size</th>
-                <th>Action</th>
+                <th className="px-4 py-3.5 text-left text-xs font-bold uppercase tracking-wider text-gray-500 bg-gray-50 border-b-2 border-gray-200">
+                  File Name
+                </th>
+                <th className="px-4 py-3.5 text-left text-xs font-bold uppercase tracking-wider text-gray-500 bg-gray-50 border-b-2 border-gray-200">
+                  Type
+                </th>
+                <th className="px-4 py-3.5 text-left text-xs font-bold uppercase tracking-wider text-gray-500 bg-gray-50 border-b-2 border-gray-200">
+                  Date
+                </th>
+                <th className="px-4 py-3.5 text-left text-xs font-bold uppercase tracking-wider text-gray-500 bg-gray-50 border-b-2 border-gray-200">
+                  Size
+                </th>
+                <th className="px-4 py-3.5 text-left text-xs font-bold uppercase tracking-wider text-gray-500 bg-gray-50 border-b-2 border-gray-200">
+                  Action
+                </th>
               </tr>
             </thead>
             <tbody>
               {downloadHistory.map((item, i) => (
-                <tr key={i}>
-                  <td
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "0.5rem",
-                    }}
-                  >
-                    <FileSpreadsheet
-                      size={16}
-                      style={{ color: "var(--color-success)" }}
-                    />{" "}
-                    {item.name}
+                <tr key={i} className="hover:bg-gray-50 transition-colors">
+                  <td className="px-4 py-3 text-sm text-gray-700 border-b border-gray-100 font-medium">
+                    <div className="flex items-center gap-2">
+                      <FileSpreadsheet size={16} className="text-success" />{" "}
+                      {item.name}
+                    </div>
                   </td>
-                  <td>{item.type}</td>
-                  <td
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "0.5rem",
-                    }}
-                  >
-                    <Calendar
-                      size={14}
-                      style={{ color: "var(--color-gray-400)" }}
-                    />{" "}
-                    {item.date}
+                  <td className="px-4 py-3 text-sm text-gray-500 border-b border-gray-100">
+                    {item.type}
                   </td>
-                  <td>{item.size}</td>
-                  <td>
-                    <button
-                      className="btn btn-secondary"
-                      style={{ padding: "6px 14px" }}
-                    >
+                  <td className="px-4 py-3 text-sm text-gray-500 border-b border-gray-100">
+                    <div className="flex items-center gap-2">
+                      <Calendar size={14} className="text-gray-400" />{" "}
+                      {item.date}
+                    </div>
+                  </td>
+                  <td className="px-4 py-3 text-sm text-gray-500 border-b border-gray-100">
+                    {item.size}
+                  </td>
+                  <td className="px-4 py-3 text-sm border-b border-gray-100">
+                    <Button variant="secondary" size="sm">
                       <Download size={14} /> Download
-                    </button>
+                    </Button>
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
-      </div>
+      </Card>
     </>
   );
 }

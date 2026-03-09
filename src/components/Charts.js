@@ -12,6 +12,7 @@ import {
   Legend,
   Area,
   AreaChart,
+  Cell,
 } from "recharts";
 
 const tooltipStyle = {
@@ -88,7 +89,7 @@ export function RiskBarChart({ data }) {
         <Tooltip contentStyle={tooltipStyle} />
         <Bar dataKey="count" radius={[6, 6, 0, 0]} name="Customers">
           {data.map((entry, index) => (
-            <Bar key={index} dataKey="count" fill={entry.color} />
+            <Cell key={index} fill={entry.color} />
           ))}
         </Bar>
       </BarChart>

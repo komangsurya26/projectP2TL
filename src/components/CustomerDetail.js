@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { X, MapPin, Phone, Zap, AlertTriangle } from "lucide-react";
+import { X, MapPin, Phone, AlertTriangle } from "lucide-react";
 import { UsageTrendChart, YearlyTrendChart } from "./Charts";
 import { measurementHistory, dataChangeHistory } from "@/data/mockData";
 
@@ -8,98 +8,87 @@ export default function CustomerDetail({ customer, onClose }) {
   const [activeTab, setActiveTab] = useState("usage");
   if (!customer) return null;
 
-  const riskColors = {
-    high: "var(--color-danger)",
-    medium: "var(--color-warning)",
-    low: "var(--color-success)",
+  const riskColorMap = {
+    high: "text-danger",
+    medium: "text-warning",
+    low: "text-success",
   };
+  const tabs = [
+    { key: "usage", label: "Monthly Usage" },
+    { key: "yearly", label: "Yearly Trend" },
+    { key: "measurements", label: "Measurements" },
+    { key: "changes", label: "Data Changes" },
+  ];
 
   return (
     <>
-      <div className="detail-overlay" onClick={onClose} />
-      <div className="detail-panel">
-        <div className="detail-header">
-          <div className="detail-header-info">
-            <h2>{customer.name}</h2>
-            <p>
+      {/* Overlay */}
+      <div
+        className="fixed inset-0 bg-dark-blue/50 z-200 animate-fade-in"
+        onClick={onClose}
+      />
+
+      {/* Panel */}
+      <div className="fixed top-0 right-0 w-[680px] max-w-[90vw] h-screen bg-white z-201 overflow-y-auto animate-slide-in shadow-[-10px_0_40px_rgba(0,0,0,0.1)]">
+        {/* Header */}
+        <div className="px-8 py-6 border-b border-gray-200 flex justify-between items-start sticky top-0 bg-white z-10">
+          <div>
+            <h2 className="text-xl font-bold text-dark-blue">
+              {customer.name}
+            </h2>
+            <p className="text-sm text-gray-500 mt-1">
               ID: {customer.id} • {customer.tariff} • {customer.power}
             </p>
           </div>
-          <button className="detail-close-btn" onClick={onClose}>
+          <button
+            onClick={onClose}
+            className="w-9 h-9 rounded-full border border-gray-200 bg-white flex items-center justify-center cursor-pointer text-gray-500 hover:bg-gray-100 hover:text-dark-blue transition-all"
+          >
             <X size={18} />
           </button>
         </div>
-        <div className="detail-body">
-          {/* Customer Info */}
-          <div
-            style={{
-              display: "flex",
-              gap: "1rem",
-              marginBottom: "1.5rem",
-              flexWrap: "wrap",
-            }}
-          >
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "0.5rem",
-                fontSize: "0.8125rem",
-                color: "var(--color-gray-600)",
-              }}
-            >
+
+        {/* Body */}
+        <div className="p-8">
+          {/* Contact info */}
+          <div className="flex gap-4 mb-6 flex-wrap">
+            <div className="flex items-center gap-2 text-sm text-gray-600">
               <MapPin size={14} /> {customer.address}
             </div>
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "0.5rem",
-                fontSize: "0.8125rem",
-                color: "var(--color-gray-600)",
-              }}
-            >
+            <div className="flex items-center gap-2 text-sm text-gray-600">
               <Phone size={14} /> {customer.phone}
             </div>
           </div>
 
           {/* Stats */}
-          <div className="detail-stats">
-            <div className="detail-stat">
-              <div className="detail-stat-value">{customer.power}</div>
-              <div className="detail-stat-label">Power Capacity</div>
+          <div className="grid grid-cols-3 gap-4 mb-8">
+            <div className="p-4 bg-gray-50 rounded-lg text-center">
+              <div className="text-2xl font-extrabold text-dark-blue">
+                {customer.power}
+              </div>
+              <div className="text-xs text-gray-500 mt-0.5">Power Capacity</div>
             </div>
-            <div className="detail-stat">
+            <div className="p-4 bg-gray-50 rounded-lg text-center">
               <div
-                className="detail-stat-value"
-                style={{ color: riskColors[customer.risk] }}
+                className={`text-2xl font-extrabold ${riskColorMap[customer.risk]}`}
               >
                 {customer.risk.charAt(0).toUpperCase() + customer.risk.slice(1)}
               </div>
-              <div className="detail-stat-label">Risk Level</div>
+              <div className="text-xs text-gray-500 mt-0.5">Risk Level</div>
             </div>
-            <div className="detail-stat">
-              <div className="detail-stat-value">{customer.result}</div>
-              <div className="detail-stat-label">Inspection Result</div>
+            <div className="p-4 bg-gray-50 rounded-lg text-center">
+              <div className="text-2xl font-extrabold text-dark-blue">
+                {customer.result}
+              </div>
+              <div className="text-xs text-gray-500 mt-0.5">
+                Inspection Result
+              </div>
             </div>
           </div>
 
           {/* Anomaly alert */}
           {customer.risk === "high" && (
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "0.75rem",
-                padding: "1rem",
-                background: "rgba(239,68,68,0.06)",
-                border: "1px solid rgba(239,68,68,0.15)",
-                borderRadius: "8px",
-                marginBottom: "1.5rem",
-                fontSize: "0.8125rem",
-                color: "var(--color-danger)",
-              }}
-            >
+            <div className="flex items-center gap-3 p-4 bg-danger/6 border border-danger/15 rounded-lg mb-6 text-sm text-danger">
               <AlertTriangle size={18} />
               <span>
                 <strong>Anomaly Detected:</strong> Significant usage drop
@@ -110,36 +99,27 @@ export default function CustomerDetail({ customer, onClose }) {
           )}
 
           {/* Tabs */}
-          <div className="detail-tabs">
-            {["usage", "yearly", "measurements", "changes"].map((tab) => (
+          <div className="flex border-b-2 border-gray-200 mb-6">
+            {tabs.map((tab) => (
               <button
-                key={tab}
-                className={`detail-tab${activeTab === tab ? " active" : ""}`}
-                onClick={() => setActiveTab(tab)}
+                key={tab.key}
+                onClick={() => setActiveTab(tab.key)}
+                className={`px-5 py-3 text-sm font-semibold cursor-pointer border-none bg-transparent font-sans relative transition-colors
+                  ${
+                    activeTab === tab.key
+                      ? 'text-electric-blue after:content-[""] after:absolute after:bottom-[-2px] after:left-0 after:right-0 after:h-0.5 after:bg-electric-blue after:rounded-t'
+                      : "text-gray-500 hover:text-dark-blue"
+                  }`}
               >
-                {
-                  {
-                    usage: "Monthly Usage",
-                    yearly: "Yearly Trend",
-                    measurements: "Measurements",
-                    changes: "Data Changes",
-                  }[tab]
-                }
+                {tab.label}
               </button>
             ))}
           </div>
 
-          {/* Tab Content */}
+          {/* Tab content */}
           {activeTab === "usage" && (
             <div>
-              <h4
-                style={{
-                  fontSize: "0.875rem",
-                  fontWeight: 600,
-                  color: "var(--color-dark-blue)",
-                  marginBottom: "1rem",
-                }}
-              >
+              <h4 className="text-sm font-semibold text-dark-blue mb-4">
                 Monthly Energy Usage (kWh)
               </h4>
               <UsageTrendChart monthlyUsage={customer.monthlyUsage} />
@@ -148,14 +128,7 @@ export default function CustomerDetail({ customer, onClose }) {
 
           {activeTab === "yearly" && (
             <div>
-              <h4
-                style={{
-                  fontSize: "0.875rem",
-                  fontWeight: 600,
-                  color: "var(--color-dark-blue)",
-                  marginBottom: "1rem",
-                }}
-              >
+              <h4 className="text-sm font-semibold text-dark-blue mb-4">
                 Yearly Consumption Trend (kWh)
               </h4>
               <YearlyTrendChart yearlyUsage={customer.yearlyUsage} />
@@ -163,27 +136,43 @@ export default function CustomerDetail({ customer, onClose }) {
           )}
 
           {activeTab === "measurements" && (
-            <div style={{ overflowX: "auto" }}>
-              <table className="history-table">
+            <div className="overflow-x-auto">
+              <table className="w-full border-collapse">
                 <thead>
                   <tr>
-                    <th>Date</th>
-                    <th>kWh</th>
-                    <th>kVARh</th>
-                    <th>PF</th>
-                    <th>Voltage</th>
-                    <th>Current</th>
+                    {["Date", "kWh", "kVARh", "PF", "Voltage", "Current"].map(
+                      (h) => (
+                        <th
+                          key={h}
+                          className="px-4 py-3 text-left text-xs font-bold uppercase tracking-wider text-gray-500 bg-gray-50 border-b-2 border-gray-200"
+                        >
+                          {h}
+                        </th>
+                      ),
+                    )}
                   </tr>
                 </thead>
                 <tbody>
                   {measurementHistory.map((m, i) => (
                     <tr key={i}>
-                      <td>{m.date}</td>
-                      <td>{m.kwh}</td>
-                      <td>{m.kvarh}</td>
-                      <td>{m.pf}</td>
-                      <td>{m.voltage}V</td>
-                      <td>{m.current}A</td>
+                      <td className="px-4 py-3 text-sm text-gray-700 border-b border-gray-100">
+                        {m.date}
+                      </td>
+                      <td className="px-4 py-3 text-sm text-gray-700 border-b border-gray-100">
+                        {m.kwh}
+                      </td>
+                      <td className="px-4 py-3 text-sm text-gray-700 border-b border-gray-100">
+                        {m.kvarh}
+                      </td>
+                      <td className="px-4 py-3 text-sm text-gray-700 border-b border-gray-100">
+                        {m.pf}
+                      </td>
+                      <td className="px-4 py-3 text-sm text-gray-700 border-b border-gray-100">
+                        {m.voltage}V
+                      </td>
+                      <td className="px-4 py-3 text-sm text-gray-700 border-b border-gray-100">
+                        {m.current}A
+                      </td>
                     </tr>
                   ))}
                 </tbody>
@@ -192,29 +181,44 @@ export default function CustomerDetail({ customer, onClose }) {
           )}
 
           {activeTab === "changes" && (
-            <div style={{ overflowX: "auto" }}>
-              <table className="history-table">
+            <div className="overflow-x-auto">
+              <table className="w-full border-collapse">
                 <thead>
                   <tr>
-                    <th>Date</th>
-                    <th>Field</th>
-                    <th>Old Value</th>
-                    <th>New Value</th>
-                    <th>Changed By</th>
+                    {[
+                      "Date",
+                      "Field",
+                      "Old Value",
+                      "New Value",
+                      "Changed By",
+                    ].map((h) => (
+                      <th
+                        key={h}
+                        className="px-4 py-3 text-left text-xs font-bold uppercase tracking-wider text-gray-500 bg-gray-50 border-b-2 border-gray-200"
+                      >
+                        {h}
+                      </th>
+                    ))}
                   </tr>
                 </thead>
                 <tbody>
                   {dataChangeHistory.map((c, i) => (
                     <tr key={i}>
-                      <td>{c.date}</td>
-                      <td>{c.field}</td>
-                      <td style={{ color: "var(--color-danger)" }}>
+                      <td className="px-4 py-3 text-sm text-gray-700 border-b border-gray-100">
+                        {c.date}
+                      </td>
+                      <td className="px-4 py-3 text-sm text-gray-700 border-b border-gray-100">
+                        {c.field}
+                      </td>
+                      <td className="px-4 py-3 text-sm text-danger border-b border-gray-100">
                         {c.oldValue}
                       </td>
-                      <td style={{ color: "var(--color-success)" }}>
+                      <td className="px-4 py-3 text-sm text-success border-b border-gray-100">
                         {c.newValue}
                       </td>
-                      <td>{c.changedBy}</td>
+                      <td className="px-4 py-3 text-sm text-gray-700 border-b border-gray-100">
+                        {c.changedBy}
+                      </td>
                     </tr>
                   ))}
                 </tbody>
