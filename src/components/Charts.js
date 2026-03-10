@@ -161,7 +161,10 @@ export function YearlyTrendChart({ yearlyUsage }) {
 
   return (
     <ResponsiveContainer width="100%" height={250}>
-      <BarChart data={data} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
+      <LineChart
+        data={data}
+        margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
+      >
         <CartesianGrid strokeDasharray="3 3" stroke="#E2E8F0" />
         <XAxis
           dataKey="year"
@@ -173,13 +176,16 @@ export function YearlyTrendChart({ yearlyUsage }) {
           axisLine={{ stroke: "#E2E8F0" }}
         />
         <Tooltip contentStyle={tooltipStyle} />
-        <Bar
+        <Line
+          type="monotone"
           dataKey="usage"
-          fill="#2196F3"
-          radius={[6, 6, 0, 0]}
+          stroke="#2196F3"
+          strokeWidth={3}
+          dot={{ r: 4, fill: "#2196F3" }}
+          activeDot={{ r: 6, fill: "#00E5FF", stroke: "#fff", strokeWidth: 2 }}
           name="Yearly Usage (kWh)"
         />
-      </BarChart>
+      </LineChart>
     </ResponsiveContainer>
   );
 }

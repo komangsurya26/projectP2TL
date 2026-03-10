@@ -1,5 +1,6 @@
 "use client";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
+import { usePathname } from "next/navigation";
 import {
   Search,
   ChevronUp,
@@ -14,7 +15,19 @@ import CustomerDetail from "@/components/CustomerDetail";
 import { Badge } from "@/components/ui/Badge";
 import { Card } from "@/components/ui/Card";
 
-export default function AnalysisPage() {
+export default function DataAnalysisPage() {
+  const pathname = usePathname();
+  // Extract type from pathname, e.g., "/data-analysis/ami" -> "ami"
+  const typeParam = pathname.split("/").pop();
+
+  // Validate type formatting
+  const isValidType = ["ami", "amr", "non-amr", "prabayar"].includes(
+    typeParam?.toLowerCase(),
+  );
+  const displayType = isValidType
+    ? typeParam.toUpperCase().replace("-", " ")
+    : "ALL";
+
   const [search, setSearch] = useState("");
   const [sortField, setSortField] = useState("id");
   const [sortDir, setSortDir] = useState("asc");
@@ -24,8 +37,19 @@ export default function AnalysisPage() {
   const [perPage, setPerPage] = useState(10);
   const [selectedCustomer, setSelectedCustomer] = useState(null);
 
+  // Reset page when switching types
+  useEffect(() => {
+    setPage(1);
+  }, [typeParam]);
+
   const filtered = useMemo(() => {
     let data = [...customers];
+
+    // Filter by Meter Type
+    if (isValidType) {
+      data = data.filter((c) => c.meterType === typeParam.toLowerCase());
+    }
+
     if (search) {
       const s = search.toLowerCase();
       data = data.filter(
@@ -36,6 +60,7 @@ export default function AnalysisPage() {
     if (riskFilter !== "all") data = data.filter((c) => c.risk === riskFilter);
     if (resultFilter !== "all")
       data = data.filter((c) => c.result === resultFilter);
+
     data.sort((a, b) => {
       let va = a[sortField],
         vb = b[sortField];
@@ -48,9 +73,17 @@ export default function AnalysisPage() {
       return 0;
     });
     return data;
-  }, [search, sortField, sortDir, riskFilter, resultFilter]);
+  }, [
+    search,
+    sortField,
+    sortDir,
+    riskFilter,
+    resultFilter,
+    isValidType,
+    typeParam,
+  ]);
 
-  const totalPages = Math.ceil(filtered.length / perPage);
+  const totalPages = Math.max(1, Math.ceil(filtered.length / perPage));
   const paged = filtered.slice((page - 1) * perPage, page * perPage);
 
   const handleSort = (field) => {
@@ -81,15 +114,32 @@ export default function AnalysisPage() {
     { key: "lastInspection", label: "Last Inspection" },
   ];
 
+  if (!isValidType) {
+    return (
+      <div className="p-8 text-center text-gray-500">
+        Invalid meter type selected.
+      </div>
+    );
+  }
+
   return (
     <>
-      <div className="mb-8">
-        <h1 className="text-2xl font-bold text-dark-blue mb-1">
-          Data Analysis
-        </h1>
-        <p className="text-sm text-gray-500">
-          Analyze P2TL inspection data and customer risk indicators
-        </p>
+      <div className="mb-8 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+        <div>
+          <h1 className="text-2xl font-bold text-dark-blue mb-1">
+            Data Analysis: {displayType}
+          </h1>
+          <p className="text-sm text-gray-500">
+            Analyze P2TL inspection data and customer risk indicators for{" "}
+            {displayType} meters.
+          </p>
+        </div>
+        <Badge
+          variant="primary"
+          className="w-fit text-sm px-3 py-1 bg-electric-blue/10 text-electric-blue border-electric-blue/20"
+        >
+          Total: {filtered.length} Customers
+        </Badge>
       </div>
 
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
@@ -168,56 +218,67 @@ export default function AnalysisPage() {
               </tr>
             </thead>
             <tbody>
-              {paged.map((customer) => (
-                <tr
-                  key={customer.id}
-                  onClick={() => setSelectedCustomer(customer)}
-                  className="transition-colors cursor-pointer hover:bg-electric-blue/4"
-                >
-                  <td className="px-4 py-3.5 text-sm border-b border-gray-100 font-semibold text-electric-blue">
-                    {customer.id}
-                  </td>
-                  <td className="px-4 py-3.5 text-sm text-gray-700 border-b border-gray-100">
-                    {customer.name}
-                  </td>
-                  <td className="px-4 py-3.5 text-sm text-gray-700 border-b border-gray-100">
-                    {customer.tariff}
-                  </td>
-                  <td className="px-4 py-3.5 text-sm text-gray-700 border-b border-gray-100">
-                    {customer.power}
-                  </td>
-                  <td className="px-4 py-3.5 text-sm border-b border-gray-100">
-                    <Badge
-                      variant={
-                        customer.result === "Anomaly"
-                          ? "danger"
-                          : customer.result === "Suspect"
-                            ? "warning"
-                            : "primary"
-                      }
-                    >
-                      {customer.result}
-                    </Badge>
-                  </td>
-                  <td className="px-4 py-3.5 text-sm border-b border-gray-100">
-                    <Badge
-                      variant={
-                        customer.risk === "high"
-                          ? "danger"
-                          : customer.risk === "medium"
-                            ? "warning"
-                            : "success"
-                      }
-                    >
-                      {customer.risk.charAt(0).toUpperCase() +
-                        customer.risk.slice(1)}
-                    </Badge>
-                  </td>
-                  <td className="px-4 py-3.5 text-sm text-gray-700 border-b border-gray-100">
-                    {customer.lastInspection}
+              {paged.length > 0 ? (
+                paged.map((customer) => (
+                  <tr
+                    key={customer.id}
+                    onClick={() => setSelectedCustomer(customer)}
+                    className="transition-colors cursor-pointer hover:bg-electric-blue/4"
+                  >
+                    <td className="px-4 py-3.5 text-sm border-b border-gray-100 font-semibold text-electric-blue">
+                      {customer.id}
+                    </td>
+                    <td className="px-4 py-3.5 text-sm text-gray-700 border-b border-gray-100">
+                      {customer.name}
+                    </td>
+                    <td className="px-4 py-3.5 text-sm text-gray-700 border-b border-gray-100">
+                      {customer.tariff}
+                    </td>
+                    <td className="px-4 py-3.5 text-sm text-gray-700 border-b border-gray-100">
+                      {customer.power}
+                    </td>
+                    <td className="px-4 py-3.5 text-sm border-b border-gray-100">
+                      <Badge
+                        variant={
+                          customer.result === "Anomaly"
+                            ? "danger"
+                            : customer.result === "Suspect"
+                              ? "warning"
+                              : "primary"
+                        }
+                      >
+                        {customer.result}
+                      </Badge>
+                    </td>
+                    <td className="px-4 py-3.5 text-sm border-b border-gray-100">
+                      <Badge
+                        variant={
+                          customer.risk === "high"
+                            ? "danger"
+                            : customer.risk === "medium"
+                              ? "warning"
+                              : "success"
+                        }
+                      >
+                        {customer.risk.charAt(0).toUpperCase() +
+                          customer.risk.slice(1)}
+                      </Badge>
+                    </td>
+                    <td className="px-4 py-3.5 text-sm text-gray-700 border-b border-gray-100">
+                      {customer.lastInspection}
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td
+                    colSpan={7}
+                    className="px-4 py-8 text-center text-sm text-gray-500 border-b border-gray-100"
+                  >
+                    No customers found matching the criteria.
                   </td>
                 </tr>
-              ))}
+              )}
             </tbody>
           </table>
         </div>
@@ -225,7 +286,7 @@ export default function AnalysisPage() {
         {/* Pagination */}
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 p-4 border-t border-gray-100 bg-white">
           <div className="text-sm text-gray-500">
-            Showing {(page - 1) * perPage + 1}–
+            Showing {filtered.length === 0 ? 0 : (page - 1) * perPage + 1}–
             {Math.min(page * perPage, filtered.length)} of {filtered.length}{" "}
             results
           </div>
@@ -273,14 +334,14 @@ export default function AnalysisPage() {
 
             <button
               className="w-9 h-9 rounded-md border border-gray-200 bg-white text-gray-600 flex items-center justify-center cursor-pointer transition-colors font-sans text-sm font-medium hover:not-disabled:border-electric-blue hover:not-disabled:text-electric-blue disabled:opacity-40 disabled:cursor-not-allowed"
-              disabled={page === totalPages}
+              disabled={page === totalPages || totalPages === 0}
               onClick={() => setPage((p) => p + 1)}
             >
               <ChevronRight size={16} />
             </button>
             <button
               className="w-9 h-9 rounded-md border border-gray-200 bg-white text-gray-600 flex items-center justify-center cursor-pointer transition-colors font-sans text-sm font-medium hover:not-disabled:border-electric-blue hover:not-disabled:text-electric-blue disabled:opacity-40 disabled:cursor-not-allowed"
-              disabled={page === totalPages}
+              disabled={page === totalPages || totalPages === 0}
               onClick={() => setPage(totalPages)}
             >
               <ChevronsRight size={16} />
