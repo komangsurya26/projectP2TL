@@ -21,7 +21,7 @@ const navItems = [
     subItems: [
       { label: "AMI", href: "/data-analysis/ami" },
       { label: "AMR", href: "/data-analysis/amr" },
-      { label: "Non-AMR", href: "/data-analysis/non-amr" },
+      { label: "Paskabayar", href: "/data-analysis/paskabayar" },
       { label: "Prabayar", href: "/data-analysis/prabayar" },
     ],
   },

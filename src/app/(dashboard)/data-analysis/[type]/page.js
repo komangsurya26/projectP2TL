@@ -17,11 +17,9 @@ import { Card } from "@/components/ui/Card";
 
 export default function DataAnalysisPage() {
   const pathname = usePathname();
-  // Extract type from pathname, e.g., "/data-analysis/ami" -> "ami"
   const typeParam = pathname.split("/").pop();
 
-  // Validate type formatting
-  const isValidType = ["ami", "amr", "non-amr", "prabayar"].includes(
+  const isValidType = ["ami", "amr", "paskabayar", "prabayar"].includes(
     typeParam?.toLowerCase(),
   );
   const displayType = isValidType
@@ -37,7 +35,6 @@ export default function DataAnalysisPage() {
   const [perPage, setPerPage] = useState(10);
   const [selectedCustomer, setSelectedCustomer] = useState(null);
 
-  // Reset page when switching types
   useEffect(() => {
     setPage(1);
   }, [typeParam]);
@@ -138,7 +135,7 @@ export default function DataAnalysisPage() {
           variant="primary"
           className="w-fit text-sm px-3 py-1 bg-electric-blue/10 text-electric-blue border-electric-blue/20"
         >
-          Total: {filtered.length} Customers
+          Total filtered: {filtered.length} Customers
         </Badge>
       </div>
 
