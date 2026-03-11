@@ -101,15 +101,66 @@ export default function DataAnalysisPage() {
     );
   };
 
-  const columns = [
-    { key: "id", label: "Customer ID" },
-    { key: "name", label: "Customer Name" },
-    { key: "tariff", label: "Tariff" },
-    { key: "power", label: "Power Capacity" },
-    { key: "result", label: "Inspection Result" },
-    { key: "risk", label: "Risk Indicator" },
-    { key: "lastInspection", label: "Last Inspection" },
-  ];
+  const getColumns = () => {
+    switch (typeParam?.toLowerCase()) {
+      case "ami":
+        return [
+          { key: "id", label: "Customer ID" },
+          { key: "name", label: "Customer Name" },
+          { key: "meterNumber", label: "Meter Number" },
+          { key: "voltage", label: "Voltage (V)" },
+          { key: "current", label: "Current (A)" },
+          { key: "powerFactor", label: "Power Factor" },
+          { key: "energyImport", label: "Energy Import (kWh)" },
+          { key: "reactiveEnergy", label: "Reactive Energy" },
+          { key: "apparentPower", label: "Apparent Power" },
+          { key: "risk", label: "Risk Score" },
+          { key: "result", label: "Status" },
+        ];
+      case "amr":
+        return [
+          { key: "id", label: "Customer ID" },
+          { key: "name", label: "Customer Name" },
+          { key: "averageConsumption", label: "Avg Consumption" },
+          { key: "consumptionChange", label: "Change (%)" },
+          { key: "risk", label: "Risk Score" },
+          { key: "result", label: "Status" },
+        ];
+      case "prabayar":
+        return [
+          { key: "id", label: "Customer ID" },
+          { key: "name", label: "Customer Name" },
+          { key: "tokenDate", label: "Token Purchase Date" },
+          { key: "tokenEnergy", label: "Token Energy (kWh)" },
+          { key: "tokenFreq", label: "Purchase Frequency" },
+          { key: "risk", label: "Risk Score" },
+          { key: "result", label: "Status" },
+        ];
+      case "paskabayar":
+        return [
+          { key: "id", label: "Customer ID" },
+          { key: "name", label: "Customer Name" },
+          { key: "billingMonth", label: "Billing Month" },
+          { key: "averageUsage", label: "Average Usage" },
+          { key: "usageChange", label: "Usage Change (%)" },
+          { key: "estimatedBill", label: "Estimated Bill" },
+          { key: "risk", label: "Risk Score" },
+          { key: "result", label: "Status" },
+        ];
+      default:
+        return [
+          { key: "id", label: "Customer ID" },
+          { key: "name", label: "Customer Name" },
+          { key: "tariff", label: "Tariff" },
+          { key: "power", label: "Power Capacity" },
+          { key: "result", label: "Inspection Result" },
+          { key: "risk", label: "Risk Indicator" },
+          { key: "lastInspection", label: "Last Inspection" },
+        ];
+    }
+  };
+
+  const columns = getColumns();
 
   if (!isValidType) {
     return (
@@ -222,48 +273,84 @@ export default function DataAnalysisPage() {
                     onClick={() => setSelectedCustomer(customer)}
                     className="transition-colors cursor-pointer hover:bg-electric-blue/4"
                   >
-                    <td className="px-4 py-3.5 text-sm border-b border-gray-100 font-semibold text-electric-blue">
-                      {customer.id}
-                    </td>
-                    <td className="px-4 py-3.5 text-sm text-gray-700 border-b border-gray-100">
-                      {customer.name}
-                    </td>
-                    <td className="px-4 py-3.5 text-sm text-gray-700 border-b border-gray-100">
-                      {customer.tariff}
-                    </td>
-                    <td className="px-4 py-3.5 text-sm text-gray-700 border-b border-gray-100">
-                      {customer.power}
-                    </td>
-                    <td className="px-4 py-3.5 text-sm border-b border-gray-100">
-                      <Badge
-                        variant={
-                          customer.result === "Anomaly"
-                            ? "danger"
-                            : customer.result === "Suspect"
-                              ? "warning"
-                              : "primary"
-                        }
-                      >
-                        {customer.result}
-                      </Badge>
-                    </td>
-                    <td className="px-4 py-3.5 text-sm border-b border-gray-100">
-                      <Badge
-                        variant={
-                          customer.risk === "high"
-                            ? "danger"
-                            : customer.risk === "medium"
-                              ? "warning"
-                              : "success"
-                        }
-                      >
-                        {customer.risk.charAt(0).toUpperCase() +
-                          customer.risk.slice(1)}
-                      </Badge>
-                    </td>
-                    <td className="px-4 py-3.5 text-sm text-gray-700 border-b border-gray-100">
-                      {customer.lastInspection}
-                    </td>
+                    {columns.map((col) => {
+                      if (col.key === "result" || col.key === "status") {
+                        return (
+                          <td
+                            key={col.key}
+                            className="px-4 py-3.5 text-sm border-b border-gray-100"
+                          >
+                            <Badge
+                              variant={
+                                customer.result === "Anomaly"
+                                  ? "danger"
+                                  : customer.result === "Suspect"
+                                    ? "warning"
+                                    : "success"
+                              }
+                            >
+                              {customer.result === "Normal"
+                                ? "Normal"
+                                : customer.result}
+                            </Badge>
+                          </td>
+                        );
+                      }
+                      if (col.key === "risk") {
+                        return (
+                          <td
+                            key={col.key}
+                            className="px-4 py-3.5 text-sm border-b border-gray-100"
+                          >
+                            <Badge
+                              variant={
+                                customer.risk === "high"
+                                  ? "danger"
+                                  : customer.risk === "medium"
+                                    ? "warning"
+                                    : "success"
+                              }
+                            >
+                              {customer.risk.charAt(0).toUpperCase() +
+                                customer.risk.slice(1)}
+                            </Badge>
+                          </td>
+                        );
+                      }
+                      if (col.key === "id") {
+                        return (
+                          <td
+                            key={col.key}
+                            className="px-4 py-3.5 text-sm border-b border-gray-100 font-semibold text-electric-blue"
+                          >
+                            {customer[col.key]}
+                          </td>
+                        );
+                      }
+                      if (col.key === "estimatedBill") {
+                        return (
+                          <td
+                            key={col.key}
+                            className="px-4 py-3.5 text-sm border-b border-gray-100 text-gray-700"
+                          >
+                            {new Intl.NumberFormat("id-ID", {
+                              style: "currency",
+                              currency: "IDR",
+                            }).format(customer[col.key])}
+                          </td>
+                        );
+                      }
+                      return (
+                        <td
+                          key={col.key}
+                          className="px-4 py-3.5 text-sm text-gray-700 border-b border-gray-100 whitespace-nowrap"
+                        >
+                          {customer[col.key] !== undefined
+                            ? customer[col.key]
+                            : "-"}
+                        </td>
+                      );
+                    })}
                   </tr>
                 ))
               ) : (

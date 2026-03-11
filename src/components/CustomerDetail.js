@@ -1,8 +1,19 @@
 "use client";
 import { useState } from "react";
 import { X, MapPin, Phone, AlertTriangle } from "lucide-react";
-import { UsageTrendChart, YearlyTrendChart } from "./Charts";
-import { measurementHistory, dataChangeHistory } from "@/data/mockData";
+import {
+  UsageTrendChart,
+  YearlyTrendChart,
+  VoltageTrendChart,
+  PowerFactorTrendChart,
+  TokenPurchaseTrendChart,
+} from "./Charts";
+import {
+  measurementHistory,
+  dataChangeHistory,
+  tokenPurchaseHistory,
+  billingUsageHistory,
+} from "@/data/mockData";
 
 export default function CustomerDetail({ customer, onClose }) {
   const [activeTab, setActiveTab] = useState("usage");
@@ -13,12 +24,51 @@ export default function CustomerDetail({ customer, onClose }) {
     medium: "text-warning",
     low: "text-success",
   };
-  const tabs = [
-    { key: "usage", label: "Monthly Usage" },
-    { key: "yearly", label: "Yearly Trend" },
-    { key: "measurements", label: "Measurements" },
-    { key: "changes", label: "Data Changes" },
-  ];
+
+  const getTabs = () => {
+    switch (customer.meterType) {
+      case "ami":
+        return [
+          { key: "usage", label: "Energy Usage" },
+          { key: "yearly", label: "Yearly Trend" },
+          { key: "voltage", label: "Voltage Trend" },
+          { key: "powerfactor", label: "Power Factor" },
+          { key: "measurements", label: "Measurement History" },
+        ];
+      case "amr":
+        return [
+          { key: "usage", label: "Monthly Usage" },
+          { key: "yearly", label: "Yearly Trend" },
+          { key: "measurements", label: "Reading History" },
+        ];
+      case "prabayar":
+        return [
+          { key: "usage", label: "Token Purchases" },
+          { key: "yearly", label: "Monthly Usage" },
+          { key: "token_history", label: "Purchase History" },
+        ];
+      case "paskabayar":
+        return [
+          { key: "usage", label: "Monthly Usage" },
+          { key: "yearly", label: "Yearly Trend" },
+          { key: "billing_history", label: "Billing History" },
+        ];
+      default:
+        return [
+          { key: "usage", label: "Monthly Usage" },
+          { key: "yearly", label: "Yearly Trend" },
+          { key: "measurements", label: "Measurements" },
+          { key: "changes", label: "Data Changes" },
+        ];
+    }
+  };
+
+  const tabs = getTabs();
+
+  // Reset tab if current activeTab doesn't exist in new tabs array
+  if (!tabs.find((t) => t.key === activeTab)) {
+    setActiveTab(tabs[0].key);
+  }
 
   return (
     <>
@@ -62,13 +112,26 @@ export default function CustomerDetail({ customer, onClose }) {
 
           {/* Stats */}
           <div className="grid grid-cols-3 gap-4 mb-8">
-            <div className="p-4 bg-gray-50 rounded-lg text-center">
+            <div className="p-4 bg-gray-50 rounded-lg text-center flex flex-col justify-center">
               <div className="text-2xl font-extrabold text-dark-blue">
-                {customer.power}
+                {customer.meterType === "paskabayar" && customer.estimatedBill
+                  ? new Intl.NumberFormat("id-ID", {
+                      notation: "compact",
+                      compactDisplay: "short",
+                    }).format(customer.estimatedBill)
+                  : customer.meterType === "prabayar" && customer.tokenFreq
+                    ? `${customer.tokenFreq}x/mo`
+                    : customer.power || "-"}
               </div>
-              <div className="text-xs text-gray-500 mt-0.5">Power Capacity</div>
+              <div className="text-xs text-gray-500 mt-0.5">
+                {customer.meterType === "paskabayar"
+                  ? "Est. Bill"
+                  : customer.meterType === "prabayar"
+                    ? "Purchase Freq"
+                    : "Power Capacity"}
+              </div>
             </div>
-            <div className="p-4 bg-gray-50 rounded-lg text-center">
+            <div className="p-4 bg-gray-50 rounded-lg text-center flex flex-col justify-center">
               <div
                 className={`text-2xl font-extrabold ${riskColorMap[customer.risk]}`}
               >
@@ -76,9 +139,9 @@ export default function CustomerDetail({ customer, onClose }) {
               </div>
               <div className="text-xs text-gray-500 mt-0.5">Risk Level</div>
             </div>
-            <div className="p-4 bg-gray-50 rounded-lg text-center">
+            <div className="p-4 bg-gray-50 rounded-lg text-center flex flex-col justify-center">
               <div className="text-2xl font-extrabold text-dark-blue">
-                {customer.result}
+                {customer.result || "Normal"}
               </div>
               <div className="text-xs text-gray-500 mt-0.5">
                 Inspection Result
@@ -88,12 +151,15 @@ export default function CustomerDetail({ customer, onClose }) {
 
           {/* Anomaly alert */}
           {customer.risk === "high" && (
-            <div className="flex items-center gap-3 p-4 bg-danger/6 border border-danger/15 rounded-lg mb-6 text-sm text-danger">
-              <AlertTriangle size={18} />
+            <div className="flex items-start gap-3 p-4 bg-danger/6 border border-danger/15 rounded-lg mb-6 text-sm text-danger">
+              <AlertTriangle size={18} className="mt-0.5 shrink-0" />
               <span>
-                <strong>Anomaly Detected:</strong> Significant usage drop
-                detected in months 4-6. Possible meter tampering or bypass
-                suspected.
+                <strong>Anomaly Detected: </strong>
+                {customer.meterType === "ami"
+                  ? "Voltage drop detected below threshold during off-peak hours."
+                  : customer.meterType === "prabayar"
+                    ? "Token purchase frequency is drastically lower than historical averages."
+                    : "Significant usage drop detected. Possible meter tampering or bypass suspected."}
               </span>
             </div>
           )}
@@ -117,21 +183,57 @@ export default function CustomerDetail({ customer, onClose }) {
           </div>
 
           {/* Tab content */}
-          {activeTab === "usage" && (
+          {activeTab === "usage" && customer.meterType === "prabayar" && (
+            <div>
+              <h4 className="text-sm font-semibold text-dark-blue mb-4">
+                Token Purchase & Frequency Trend
+              </h4>
+              <TokenPurchaseTrendChart />
+            </div>
+          )}
+
+          {activeTab === "usage" && customer.meterType !== "prabayar" && (
             <div>
               <h4 className="text-sm font-semibold text-dark-blue mb-4">
                 Monthly Energy Usage (kWh)
               </h4>
-              <UsageTrendChart monthlyUsage={customer.monthlyUsage} />
+              <UsageTrendChart monthlyUsage={customer.monthlyUsage || []} />
             </div>
           )}
 
-          {activeTab === "yearly" && (
+          {activeTab === "yearly" && customer.meterType === "prabayar" && (
+            <div>
+              <h4 className="text-sm font-semibold text-dark-blue mb-4">
+                Monthly Energy Usage (kWh)
+              </h4>
+              <UsageTrendChart monthlyUsage={customer.monthlyUsage || []} />
+            </div>
+          )}
+
+          {activeTab === "yearly" && customer.meterType !== "prabayar" && (
             <div>
               <h4 className="text-sm font-semibold text-dark-blue mb-4">
                 Yearly Consumption Trend (kWh)
               </h4>
-              <YearlyTrendChart yearlyUsage={customer.yearlyUsage} />
+              <YearlyTrendChart yearlyUsage={customer.yearlyUsage || []} />
+            </div>
+          )}
+
+          {activeTab === "voltage" && (
+            <div>
+              <h4 className="text-sm font-semibold text-dark-blue mb-4">
+                Voltage Trend (V)
+              </h4>
+              <VoltageTrendChart />
+            </div>
+          )}
+
+          {activeTab === "powerfactor" && (
+            <div>
+              <h4 className="text-sm font-semibold text-dark-blue mb-4">
+                Power Factor Trend
+              </h4>
+              <PowerFactorTrendChart />
             </div>
           )}
 
@@ -162,16 +264,103 @@ export default function CustomerDetail({ customer, onClose }) {
                         {m.kwh}
                       </td>
                       <td className="px-4 py-3 text-sm text-gray-700 border-b border-gray-100">
-                        {m.kvarh}
+                        {customer.meterType === "ami" ? m.kvarh : "-"}
                       </td>
                       <td className="px-4 py-3 text-sm text-gray-700 border-b border-gray-100">
-                        {m.pf}
+                        {customer.meterType === "ami" ? m.pf : "-"}
                       </td>
                       <td className="px-4 py-3 text-sm text-gray-700 border-b border-gray-100">
-                        {m.voltage}V
+                        {customer.meterType === "ami" ? `${m.voltage}V` : "-"}
                       </td>
                       <td className="px-4 py-3 text-sm text-gray-700 border-b border-gray-100">
-                        {m.current}A
+                        {customer.meterType === "ami" ? `${m.current}A` : "-"}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+
+          {activeTab === "token_history" && (
+            <div className="overflow-x-auto">
+              <table className="w-full border-collapse">
+                <thead>
+                  <tr>
+                    {["Date", "Amount", "Energy", "Token Code"].map((h) => (
+                      <th
+                        key={h}
+                        className="px-4 py-3 text-left text-xs font-bold uppercase tracking-wider text-gray-500 bg-gray-50 border-b-2 border-gray-200"
+                      >
+                        {h}
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {tokenPurchaseHistory.map((t, i) => (
+                    <tr key={i}>
+                      <td className="px-4 py-3 text-sm text-gray-700 border-b border-gray-100">
+                        {t.date}
+                      </td>
+                      <td className="px-4 py-3 text-sm font-semibold text-dark-blue border-b border-gray-100">
+                        {t.amount}
+                      </td>
+                      <td className="px-4 py-3 text-sm text-gray-700 border-b border-gray-100">
+                        {t.energy}
+                      </td>
+                      <td className="px-4 py-3 text-sm font-mono text-gray-600 border-b border-gray-100">
+                        {t.token}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+
+          {activeTab === "billing_history" && (
+            <div className="overflow-x-auto">
+              <table className="w-full border-collapse">
+                <thead>
+                  <tr>
+                    {[
+                      "Billing Month",
+                      "Usage",
+                      "Amount",
+                      "Status",
+                      "Due Date",
+                    ].map((h) => (
+                      <th
+                        key={h}
+                        className="px-4 py-3 text-left text-xs font-bold uppercase tracking-wider text-gray-500 bg-gray-50 border-b-2 border-gray-200"
+                      >
+                        {h}
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {billingUsageHistory.map((b, i) => (
+                    <tr key={i}>
+                      <td className="px-4 py-3 text-sm text-gray-700 border-b border-gray-100">
+                        {b.month}
+                      </td>
+                      <td className="px-4 py-3 text-sm text-gray-700 border-b border-gray-100">
+                        {b.usage}
+                      </td>
+                      <td className="px-4 py-3 text-sm font-semibold text-dark-blue border-b border-gray-100">
+                        {b.bill}
+                      </td>
+                      <td className="px-4 py-3 text-sm border-b border-gray-100">
+                        <span
+                          className={`px-2 py-0.5 rounded-full text-xs font-medium ${b.status === "Paid" ? "bg-success/10 text-success" : "bg-warning/10 text-warning"}`}
+                        >
+                          {b.status}
+                        </span>
+                      </td>
+                      <td className="px-4 py-3 text-sm text-gray-500 border-b border-gray-100">
+                        {b.dueDate}
                       </td>
                     </tr>
                   ))}
