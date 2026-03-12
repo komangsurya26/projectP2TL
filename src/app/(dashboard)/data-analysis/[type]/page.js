@@ -10,7 +10,7 @@ import {
   ChevronLeft,
   ChevronRight,
 } from "lucide-react";
-import { customers } from "@/data/mockData";
+
 import CustomerDetail from "@/components/CustomerDetail";
 import { Badge } from "@/components/ui/Badge";
 import { Card } from "@/components/ui/Card";
@@ -19,9 +19,10 @@ export default function DataAnalysisPage() {
   const pathname = usePathname();
   const typeParam = pathname.split("/").pop();
 
-  const isValidType = ["ami", "amr", "paskabayar", "prabayar"].includes(
+  const isValidType = ["ami", "paskabayar", "prabayar"].includes(
     typeParam?.toLowerCase(),
   );
+
   const displayType = isValidType
     ? typeParam.toUpperCase().replace("-", " ")
     : "ALL";
@@ -32,8 +33,25 @@ export default function DataAnalysisPage() {
   const [riskFilter, setRiskFilter] = useState("all");
   const [resultFilter, setResultFilter] = useState("all");
   const [page, setPage] = useState(1);
-  const [perPage, setPerPage] = useState(10);
+  const [perPage, setPerPage] = useState(50);
   const [selectedCustomer, setSelectedCustomer] = useState(null);
+  const [customers, setCustomers] = useState([]);
+  const [meta, setMeta] = useState({});
+
+  useEffect(() => {
+    const fetchCustomers = async () => {
+      const response = await fetch(
+        `https://api.p2tlanalisa.web.id/api/pelanggan?jenis_meter=${typeParam}&page=${page}&per_page=${perPage}&idpel=${search}`,
+      );
+
+      const json = await response.json();
+
+      setCustomers(json.data || []);
+      setMeta(json.meta || {});
+    };
+
+    fetchCustomers();
+  }, [page, typeParam, perPage, search]);
 
   useEffect(() => {
     setPage(1);
@@ -42,58 +60,57 @@ export default function DataAnalysisPage() {
   const filtered = useMemo(() => {
     let data = [...customers];
 
-    // Filter by Meter Type
-    if (isValidType) {
-      data = data.filter((c) => c.meterType === typeParam.toLowerCase());
-    }
-
     if (search) {
       const s = search.toLowerCase();
       data = data.filter(
         (c) =>
-          c.id.toLowerCase().includes(s) || c.name.toLowerCase().includes(s),
+          c.id?.toLowerCase().includes(s) || c.name?.toLowerCase().includes(s),
       );
     }
-    if (riskFilter !== "all") data = data.filter((c) => c.risk === riskFilter);
-    if (resultFilter !== "all")
+
+    if (riskFilter !== "all") {
+      data = data.filter((c) => c.risk === riskFilter);
+    }
+
+    if (resultFilter !== "all") {
       data = data.filter((c) => c.result === resultFilter);
+    }
 
     data.sort((a, b) => {
-      let va = a[sortField],
-        vb = b[sortField];
+      let va = a[sortField];
+      let vb = b[sortField];
+
       if (typeof va === "string") {
         va = va.toLowerCase();
         vb = vb.toLowerCase();
       }
+
       if (va < vb) return sortDir === "asc" ? -1 : 1;
       if (va > vb) return sortDir === "asc" ? 1 : -1;
+
       return 0;
     });
-    return data;
-  }, [
-    search,
-    sortField,
-    sortDir,
-    riskFilter,
-    resultFilter,
-    isValidType,
-    typeParam,
-  ]);
 
-  const totalPages = Math.max(1, Math.ceil(filtered.length / perPage));
-  const paged = filtered.slice((page - 1) * perPage, page * perPage);
+    return data;
+  }, [customers, search, sortField, sortDir, riskFilter, resultFilter]);
+
+  const paged = filtered;
+  const totalPages = meta.last_page || 1;
 
   const handleSort = (field) => {
-    if (sortField === field) setSortDir((d) => (d === "asc" ? "desc" : "asc"));
-    else {
+    if (sortField === field) {
+      setSortDir((d) => (d === "asc" ? "desc" : "asc"));
+    } else {
       setSortField(field);
       setSortDir("asc");
     }
   };
 
   const SortIcon = ({ field }) => {
-    if (sortField !== field)
+    if (sortField !== field) {
       return <ChevronUp size={12} className="opacity-30" />;
+    }
+
     return sortDir === "asc" ? (
       <ChevronUp size={12} />
     ) : (
@@ -108,24 +125,10 @@ export default function DataAnalysisPage() {
           { key: "id", label: "Customer ID" },
           { key: "name", label: "Customer Name" },
           { key: "meterNumber", label: "Meter Number" },
-          { key: "voltage", label: "Voltage (V)" },
-          { key: "current", label: "Current (A)" },
-          { key: "powerFactor", label: "Power Factor" },
-          { key: "energyImport", label: "Energy Import (kWh)" },
-          { key: "reactiveEnergy", label: "Reactive Energy" },
-          { key: "apparentPower", label: "Apparent Power" },
           { key: "risk", label: "Risk Score" },
           { key: "result", label: "Status" },
         ];
-      case "amr":
-        return [
-          { key: "id", label: "Customer ID" },
-          { key: "name", label: "Customer Name" },
-          { key: "averageConsumption", label: "Avg Consumption" },
-          { key: "consumptionChange", label: "Change (%)" },
-          { key: "risk", label: "Risk Score" },
-          { key: "result", label: "Status" },
-        ];
+
       case "prabayar":
         return [
           { key: "id", label: "Customer ID" },
@@ -136,6 +139,7 @@ export default function DataAnalysisPage() {
           { key: "risk", label: "Risk Score" },
           { key: "result", label: "Status" },
         ];
+
       case "paskabayar":
         return [
           { key: "id", label: "Customer ID" },
@@ -147,16 +151,9 @@ export default function DataAnalysisPage() {
           { key: "risk", label: "Risk Score" },
           { key: "result", label: "Status" },
         ];
+
       default:
-        return [
-          { key: "id", label: "Customer ID" },
-          { key: "name", label: "Customer Name" },
-          { key: "tariff", label: "Tariff" },
-          { key: "power", label: "Power Capacity" },
-          { key: "result", label: "Inspection Result" },
-          { key: "risk", label: "Risk Indicator" },
-          { key: "lastInspection", label: "Last Inspection" },
-        ];
+        return [];
     }
   };
 
@@ -182,11 +179,12 @@ export default function DataAnalysisPage() {
             {displayType} meters.
           </p>
         </div>
+
         <Badge
           variant="primary"
           className="w-fit text-sm px-3 py-1 bg-electric-blue/10 text-electric-blue border-electric-blue/20"
         >
-          Total filtered: {filtered.length} Customers
+          Total: {meta.total ?? filtered.length} Customers
         </Badge>
       </div>
 
@@ -265,6 +263,7 @@ export default function DataAnalysisPage() {
                 ))}
               </tr>
             </thead>
+
             <tbody>
               {paged.length > 0 ? (
                 paged.map((customer) => (
@@ -274,7 +273,7 @@ export default function DataAnalysisPage() {
                     className="transition-colors cursor-pointer hover:bg-electric-blue/4"
                   >
                     {columns.map((col) => {
-                      if (col.key === "result" || col.key === "status") {
+                      if (col.key === "result") {
                         return (
                           <td
                             key={col.key}
@@ -286,16 +285,17 @@ export default function DataAnalysisPage() {
                                   ? "danger"
                                   : customer.result === "Suspect"
                                     ? "warning"
-                                    : "success"
+                                    : customer.result === "Normal"
+                                      ? "success"
+                                      : "default"
                               }
                             >
-                              {customer.result === "Normal"
-                                ? "Normal"
-                                : customer.result}
+                              {customer.result}
                             </Badge>
                           </td>
                         );
                       }
+
                       if (col.key === "risk") {
                         return (
                           <td
@@ -308,46 +308,23 @@ export default function DataAnalysisPage() {
                                   ? "danger"
                                   : customer.risk === "medium"
                                     ? "warning"
-                                    : "success"
+                                    : customer.risk === "low"
+                                      ? "success"
+                                      : "default"
                               }
                             >
-                              {customer.risk.charAt(0).toUpperCase() +
-                                customer.risk.slice(1)}
+                              {customer.risk}
                             </Badge>
                           </td>
                         );
                       }
-                      if (col.key === "id") {
-                        return (
-                          <td
-                            key={col.key}
-                            className="px-4 py-3.5 text-sm border-b border-gray-100 font-semibold text-electric-blue"
-                          >
-                            {customer[col.key]}
-                          </td>
-                        );
-                      }
-                      if (col.key === "estimatedBill") {
-                        return (
-                          <td
-                            key={col.key}
-                            className="px-4 py-3.5 text-sm border-b border-gray-100 text-gray-700"
-                          >
-                            {new Intl.NumberFormat("id-ID", {
-                              style: "currency",
-                              currency: "IDR",
-                            }).format(customer[col.key])}
-                          </td>
-                        );
-                      }
+
                       return (
                         <td
                           key={col.key}
                           className="px-4 py-3.5 text-sm text-gray-700 border-b border-gray-100 whitespace-nowrap"
                         >
-                          {customer[col.key] !== undefined
-                            ? customer[col.key]
-                            : "-"}
+                          {customer[col.key] ?? "-"}
                         </td>
                       );
                     })}
@@ -367,66 +344,60 @@ export default function DataAnalysisPage() {
           </table>
         </div>
 
-        {/* Pagination */}
+        {/* PAGINATION UI TIDAK DIUBAH */}
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 p-4 border-t border-gray-100 bg-white">
           <div className="text-sm text-gray-500">
-            Showing {filtered.length === 0 ? 0 : (page - 1) * perPage + 1}–
-            {Math.min(page * perPage, filtered.length)} of {filtered.length}{" "}
-            results
+            Total {meta.total ?? 0} results
           </div>
 
           <div className="flex items-center gap-1">
             <button
-              className="w-9 h-9 rounded-md border border-gray-200 bg-white text-gray-600 flex items-center justify-center cursor-pointer transition-colors font-sans text-sm font-medium hover:not-disabled:border-electric-blue hover:not-disabled:text-electric-blue disabled:opacity-40 disabled:cursor-not-allowed"
               disabled={page === 1}
               onClick={() => setPage(1)}
+              className="w-9 h-9 rounded-md border border-gray-200 bg-white text-gray-600 flex items-center justify-center disabled:opacity-40"
             >
               <ChevronsLeft size={16} />
             </button>
+
             <button
-              className="w-9 h-9 rounded-md border border-gray-200 bg-white text-gray-600 flex items-center justify-center cursor-pointer transition-colors font-sans text-sm font-medium hover:not-disabled:border-electric-blue hover:not-disabled:text-electric-blue disabled:opacity-40 disabled:cursor-not-allowed"
               disabled={page === 1}
               onClick={() => setPage((p) => p - 1)}
+              className="w-9 h-9 rounded-md border border-gray-200 bg-white text-gray-600 flex items-center justify-center disabled:opacity-40"
             >
               <ChevronLeft size={16} />
             </button>
+            {Array.from({ length: Math.min(totalPages, 5) }, (_, i) => {
+              const start = Math.max(1, Math.min(page - 2, totalPages - 4));
+              const p = start + i;
+              if (p > totalPages) return null;
 
-            <div className="hidden sm:flex items-center gap-1 mx-1">
-              {Array.from({ length: Math.min(totalPages, 5) }, (_, i) => {
-                const p = Math.max(1, Math.min(page - 2, totalPages - 4)) + i;
-                if (p > totalPages) return null;
-                return (
-                  <button
-                    key={p}
-                    className={`w-9 h-9 rounded-md border flex items-center justify-center cursor-pointer transition-colors font-sans text-sm font-medium
-                      ${
-                        p === page
-                          ? "bg-electric-blue border-electric-blue text-white"
-                          : "border-gray-200 bg-white text-gray-600 hover:border-electric-blue hover:text-electric-blue"
-                      }`}
-                    onClick={() => setPage(p)}
-                  >
-                    {p}
-                  </button>
-                );
-              })}
-            </div>
-
-            <span className="sm:hidden text-sm font-medium px-2">
-              Page {page} of {totalPages}
-            </span>
+              return (
+                <button
+                  key={p}
+                  className={`w-9 h-9 rounded-md border flex items-center justify-center cursor-pointer transition-colors font-sans text-sm font-medium ${
+                    p === page
+                      ? "bg-electric-blue border-electric-blue text-white"
+                      : "border-gray-200 bg-white text-gray-600 hover:border-electric-blue hover:text-electric-blue"
+                  }`}
+                  onClick={() => setPage(p)}
+                >
+                  {p}
+                </button>
+              );
+            })}
 
             <button
-              className="w-9 h-9 rounded-md border border-gray-200 bg-white text-gray-600 flex items-center justify-center cursor-pointer transition-colors font-sans text-sm font-medium hover:not-disabled:border-electric-blue hover:not-disabled:text-electric-blue disabled:opacity-40 disabled:cursor-not-allowed"
-              disabled={page === totalPages || totalPages === 0}
+              disabled={page === totalPages}
               onClick={() => setPage((p) => p + 1)}
+              className="w-9 h-9 rounded-md border border-gray-200 bg-white text-gray-600 flex items-center justify-center disabled:opacity-40"
             >
               <ChevronRight size={16} />
             </button>
+
             <button
-              className="w-9 h-9 rounded-md border border-gray-200 bg-white text-gray-600 flex items-center justify-center cursor-pointer transition-colors font-sans text-sm font-medium hover:not-disabled:border-electric-blue hover:not-disabled:text-electric-blue disabled:opacity-40 disabled:cursor-not-allowed"
-              disabled={page === totalPages || totalPages === 0}
+              disabled={page === totalPages}
               onClick={() => setPage(totalPages)}
+              className="w-9 h-9 rounded-md border border-gray-200 bg-white text-gray-600 flex items-center justify-center disabled:opacity-40"
             >
               <ChevronsRight size={16} />
             </button>

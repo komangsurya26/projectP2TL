@@ -35,12 +35,6 @@ export default function CustomerDetail({ customer, onClose }) {
           { key: "powerfactor", label: "Power Factor" },
           { key: "measurements", label: "Measurement History" },
         ];
-      case "amr":
-        return [
-          { key: "usage", label: "Monthly Usage" },
-          { key: "yearly", label: "Yearly Trend" },
-          { key: "measurements", label: "Reading History" },
-        ];
       case "prabayar":
         return [
           { key: "usage", label: "Token Purchases" },

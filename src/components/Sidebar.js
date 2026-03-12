@@ -20,7 +20,6 @@ const navItems = [
     icon: BarChart3,
     subItems: [
       { label: "AMI", href: "/data-analysis/ami" },
-      { label: "AMR", href: "/data-analysis/amr" },
       { label: "Paskabayar", href: "/data-analysis/paskabayar" },
       { label: "Prabayar", href: "/data-analysis/prabayar" },
     ],
