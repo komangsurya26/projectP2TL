@@ -1,4 +1,4 @@
-name: Deploy
+name: Deploy Next.js Static (Local Build)
 
 on:
   push:
@@ -10,24 +10,30 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: SSH Deploy
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Install Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "22" # versi Node.js yang sesuai proyek
+
+      - name: Install dependencies & build static site
+        run: |
+          npm install
+          npm run build
+          npm run export
+
+      - name: Deploy to VPS
         uses: appleboy/ssh-action@v1
         with:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_SSH_KEY }}
+          port: 22
           script: |
-            echo "===== Checking Node.js & NPM ====="
-            if ! command -v node > /dev/null; then
-              echo "Node.js not found. Installing Node.js..."
-              curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
-              sudo apt-get install -y nodejs
-            fi
-
-            echo "Node.js version: $(node -v)"
-            echo "NPM version: $(npm -v)"
-
-            cd ${{ secrets.DEPLOY_PATH }}
-            git pull origin main
-            npm install
-            npm run build
+            echo "===== Cleaning old files ====="
+            rm -rf ${{ secrets.DEPLOY_PATH }}/*
+            echo "===== Uploading new files ====="
+            mkdir -p ${{ secrets.DEPLOY_PATH }}
+          source: out/ # <-- upload folder 'out/' ke server
