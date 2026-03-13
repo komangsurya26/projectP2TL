@@ -1,4 +1,4 @@
-name: Deploy Next.js Project
+name: Deploy Next.js Static via SSH
 
 on:
   push:
@@ -6,27 +6,29 @@ on:
       - main
 
 jobs:
-  deploy:
+  build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
-      # 1️⃣ Checkout repo (opsional, kalau butuh copy files lokal)
-      - uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-      # 2️⃣ Deploy via SSH
-      - name: SSH Deploy
-        uses: appleboy/ssh-action@v1
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
         with:
-          host: ${{ secrets.VPS_HOST }}
-          username: ${{ secrets.VPS_USER }}
-          key: ${{ secrets.VPS_SSH_KEY }}
-          port: 22
-          script: |
-            cd ${{ secrets.DEPLOY_PATH }} || exit
-            echo "Pulling latest code..."
-            git pull origin main
-            echo "Installing dependencies..."
-            npm install
-            echo "Building project..."
-            npm run build
-            echo "Deployment finished!"
+          node-version: "20"
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build
+        run: npm run build
+
+      - name: Setup SSH
+        uses: webfactory/ssh-agent@v0.8.1
+        with:
+          ssh-private-key: ${{ secrets.VPS_SSH_KEY }}
+
+      - name: Deploy to Cloud Panel via SCP
+        run: |
+          scp -r out/* ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:${{ secrets.DEPLOY_PATH }}
