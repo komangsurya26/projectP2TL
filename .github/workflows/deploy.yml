@@ -1,4 +1,4 @@
-name: Deploy Static Next.js
+name: Deploy Next.js Static
 
 on:
   push:
@@ -14,14 +14,15 @@ jobs:
 
       - uses: actions/setup-node@v3
         with:
-          node-version: "20"
+          node-version: "22"
 
-      - run: |
+      - name: Install dependencies & build
+        run: |
           npm install
           npm run build
-          npm run export
+          npm run export  # menghasilkan folder out/
 
-      - name: Deploy via SSH
+      - name: Deploy to VPS via SSH
         uses: appleboy/ssh-action@v1
         with:
           host: ${{ secrets.VPS_HOST }}
@@ -29,6 +30,7 @@ jobs:
           key: ${{ secrets.VPS_SSH_KEY }}
           port: 22
           script: |
+            echo "Cleaning old files..."
             rm -rf ${{ secrets.DEPLOY_PATH }}/*
             mkdir -p ${{ secrets.DEPLOY_PATH }}
           source: out/
