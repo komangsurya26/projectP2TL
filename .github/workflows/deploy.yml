@@ -31,4 +31,4 @@ jobs:
 
       - name: Deploy via Rsync
         run: |
-          rsync -avz --delete -e "ssh -o StrictHostKeyChecking=no" out/ ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:${{ secrets.DEPLOY_PATH }} --rsync-path=/usr/bin/rsync
+          rsync -avz --delete -e "ssh -p 2222 -o StrictHostKeyChecking=no" out/ ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:${{ secrets.DEPLOY_PATH }} --rsync-path=/usr/bin/rsync
