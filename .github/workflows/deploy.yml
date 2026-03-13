@@ -21,14 +21,14 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Build
+      - name: Build and Export
         run: npm run build && npm run export
 
-      - name: Setup SSH
-        uses: webfactory/ssh-agent@v0.8.2 # <-- versi terbaru yang stabil
+      - name: Setup SSH agent
+        uses: webfactory/ssh-agent@v0.9.1
         with:
           ssh-private-key: ${{ secrets.VPS_SSH_KEY }}
 
-      - name: Deploy to Cloud Panel via SCP
+      - name: Deploy Files via SCP
         run: |
-          scp -r out/* ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:${{ secrets.DEPLOY_PATH }}
+          scp -o StrictHostKeyChecking=no -r out/* ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:${{ secrets.DEPLOY_PATH }}
