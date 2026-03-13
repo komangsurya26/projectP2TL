@@ -17,6 +17,16 @@ jobs:
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_SSH_KEY }}
           script: |
+            echo "===== Checking Node.js & NPM ====="
+            if ! command -v node > /dev/null; then
+              echo "Node.js not found. Installing Node.js..."
+              curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
+              sudo apt-get install -y nodejs
+            fi
+
+            echo "Node.js version: $(node -v)"
+            echo "NPM version: $(npm -v)"
+
             cd ${{ secrets.DEPLOY_PATH }}
             git pull origin main
             npm install
