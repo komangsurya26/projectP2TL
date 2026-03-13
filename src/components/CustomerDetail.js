@@ -23,6 +23,7 @@ export default function CustomerDetail({ customer, onClose }) {
     high: "text-danger",
     medium: "text-warning",
     low: "text-success",
+    unknown: "text-black",
   };
 
   const getTabs = () => {
@@ -127,14 +128,14 @@ export default function CustomerDetail({ customer, onClose }) {
             </div>
             <div className="p-4 bg-gray-50 rounded-lg text-center flex flex-col justify-center">
               <div
-                className={`text-2xl font-extrabold ${riskColorMap[customer.risk]}`}
+                className={`text-2xl font-extrabold ${riskColorMap[customer.risk]} overflow-y-auto`}
               >
                 {customer.risk.charAt(0).toUpperCase() + customer.risk.slice(1)}
               </div>
               <div className="text-xs text-gray-500 mt-0.5">Risk Level</div>
             </div>
             <div className="p-4 bg-gray-50 rounded-lg text-center flex flex-col justify-center">
-              <div className="text-2xl font-extrabold text-dark-blue">
+              <div className="text-2xl font-extrabold text-dark-blue overflow-y-auto">
                 {customer.result || "Normal"}
               </div>
               <div className="text-xs text-gray-500 mt-0.5">
@@ -159,7 +160,7 @@ export default function CustomerDetail({ customer, onClose }) {
           )}
 
           {/* Tabs */}
-          <div className="flex border-b-2 border-gray-200 mb-6">
+          <div className="flex border-b-2 border-gray-200 mb-6 overflow-x-auto overflow-y-hidden">
             {tabs.map((tab) => (
               <button
                 key={tab.key}
