@@ -14,25 +14,6 @@ export const customers = [
     monthlyUsage: [320, 310, 340, 325, 350, 330, 345, 360, 320, 340, 335, 350],
     yearlyUsage: [3800, 3900, 4020, 3950, 4100],
   },
-  //PASKABAYAR
-  {
-    id: "PLN-003",
-    name: "Agung Wijaya",
-    tariff: "R-2/TR",
-    power: "5500 VA",
-    result: "Normal",
-    risk: "low",
-    lastInspection: "2026-01-28",
-    address: "Jl. Diponegoro No. 78, Surabaya",
-    phone: "0814-6789-0123",
-    meterType: "paskabayar",
-    billingMonth: "Feb-2026",
-    averageUsage: 710.0,
-    usageChange: -2.3,
-    estimatedBill: 1250000,
-    monthlyUsage: [680, 700, 720, 690, 710, 705, 730, 740, 720, 710, 695, 700],
-    yearlyUsage: [8200, 8400, 8500, 8300, 8600],
-  },
   //PRABAYAR
   {
     id: "PLN-004",

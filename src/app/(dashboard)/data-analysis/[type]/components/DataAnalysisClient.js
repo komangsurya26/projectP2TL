@@ -139,19 +139,6 @@ export default function DataAnalysisPage() {
           { key: "risk", label: "Risk Score" },
           { key: "result", label: "Status" },
         ];
-
-      case "paskabayar":
-        return [
-          { key: "id", label: "Customer ID" },
-          { key: "name", label: "Customer Name" },
-          { key: "billingMonth", label: "Billing Month" },
-          { key: "averageUsage", label: "Average Usage" },
-          { key: "usageChange", label: "Usage Change (%)" },
-          { key: "estimatedBill", label: "Estimated Bill" },
-          { key: "risk", label: "Risk Score" },
-          { key: "result", label: "Status" },
-        ];
-
       default:
         return [];
     }

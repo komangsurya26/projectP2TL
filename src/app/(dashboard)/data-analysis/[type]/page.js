@@ -1,7 +1,7 @@
 import DataAnalysisClient from "./components/DataAnalysisClient";
 
 export function generateStaticParams() {
-  return [{ type: "ami" }, { type: "paskabayar" }, { type: "prabayar" }];
+  return [{ type: "ami" }, { type: "prabayar" }];
 }
 
 export default function Page({ params }) {

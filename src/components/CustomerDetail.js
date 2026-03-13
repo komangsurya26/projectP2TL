@@ -42,12 +42,6 @@ export default function CustomerDetail({ customer, onClose }) {
           { key: "yearly", label: "Monthly Usage" },
           { key: "token_history", label: "Purchase History" },
         ];
-      case "paskabayar":
-        return [
-          { key: "usage", label: "Monthly Usage" },
-          { key: "yearly", label: "Yearly Trend" },
-          { key: "billing_history", label: "Billing History" },
-        ];
       default:
         return [
           { key: "usage", label: "Monthly Usage" },
@@ -109,21 +103,14 @@ export default function CustomerDetail({ customer, onClose }) {
           <div className="grid grid-cols-3 gap-4 mb-8">
             <div className="p-4 bg-gray-50 rounded-lg text-center flex flex-col justify-center">
               <div className="text-2xl font-extrabold text-dark-blue">
-                {customer.meterType === "paskabayar" && customer.estimatedBill
-                  ? new Intl.NumberFormat("id-ID", {
-                      notation: "compact",
-                      compactDisplay: "short",
-                    }).format(customer.estimatedBill)
-                  : customer.meterType === "prabayar" && customer.tokenFreq
-                    ? `${customer.tokenFreq}x/mo`
-                    : customer.power || "-"}
+                {customer.meterType === "prabayar" && customer.tokenFreq
+                  ? `${customer.tokenFreq}x/mo`
+                  : customer.power || "-"}
               </div>
               <div className="text-xs text-gray-500 mt-0.5">
-                {customer.meterType === "paskabayar"
-                  ? "Est. Bill"
-                  : customer.meterType === "prabayar"
-                    ? "Purchase Freq"
-                    : "Power Capacity"}
+                {customer.meterType === "prabayar"
+                  ? "Purchase Freq"
+                  : "Power Capacity"}
               </div>
             </div>
             <div className="p-4 bg-gray-50 rounded-lg text-center flex flex-col justify-center">
