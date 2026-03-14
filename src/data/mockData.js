@@ -1,5 +1,4 @@
 export const customers = [
-  //AMI
   {
     id: "PLN-001",
     name: "Budi Santoso",
@@ -13,24 +12,6 @@ export const customers = [
     meterNumber: "51002345678",
     monthlyUsage: [320, 310, 340, 325, 350, 330, 345, 360, 320, 340, 335, 350],
     yearlyUsage: [3800, 3900, 4020, 3950, 4100],
-  },
-  //PRABAYAR
-  {
-    id: "PLN-004",
-    name: "Dewi Lestari",
-    tariff: "R-1/TR",
-    power: "1300 VA",
-    result: "Suspect",
-    risk: "medium",
-    lastInspection: "2026-02-01",
-    address: "Jl. Ahmad Yani No. 33, Bandung",
-    phone: "0815-7890-1234",
-    meterType: "prabayar",
-    tokenDate: "2026-02-14",
-    tokenEnergy: 150.5,
-    tokenFreq: 2.5,
-    monthlyUsage: [180, 190, 170, 165, 200, 210, 190, 180, 175, 185, 195, 180],
-    yearlyUsage: [2100, 2200, 2150, 2300, 2250],
   },
 ];
 
@@ -191,7 +172,7 @@ export const dataChangeHistory = [
 export const tokenPurchaseHistory = [
   {
     date: "2026-02-14",
-    amount: "Rp 200.000",
+    amount: "Rp 201.000",
     energy: "150.5 kWh",
     token: "1234-5678-9012-3456",
   },

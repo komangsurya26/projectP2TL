@@ -133,9 +133,7 @@ export default function DataAnalysisPage() {
         return [
           { key: "id", label: "Customer ID" },
           { key: "name", label: "Customer Name" },
-          { key: "tokenDate", label: "Token Purchase Date" },
-          { key: "tokenEnergy", label: "Token Energy (kWh)" },
-          { key: "tokenFreq", label: "Purchase Frequency" },
+          { key: "meterNumber", label: "Meter Number" },
           { key: "risk", label: "Risk Score" },
           { key: "result", label: "Status" },
         ];
@@ -277,7 +275,7 @@ export default function DataAnalysisPage() {
                                       : "default"
                               }
                             >
-                              {customer.result}
+                              {customer.result.toLowerCase()}
                             </Badge>
                           </td>
                         );
