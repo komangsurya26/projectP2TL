@@ -266,11 +266,11 @@ export default function DataAnalysisPage() {
                           >
                             <Badge
                               variant={
-                                customer.result === "Anomaly"
+                                customer.result === "ANOMALY"
                                   ? "danger"
-                                  : customer.result === "Suspect"
+                                  : customer.result === "SUSPECT"
                                     ? "warning"
-                                    : customer.result === "Normal"
+                                    : customer.result === "LOW_CONSUMPTION"
                                       ? "success"
                                       : "default"
                               }
