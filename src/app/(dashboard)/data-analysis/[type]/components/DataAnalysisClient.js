@@ -286,14 +286,14 @@ export default function DataAnalysisPage() {
               return (
                 <button
                   key={p}
-                  className={`w-9 h-9 rounded-md border flex items-center justify-center cursor-pointer transition-colors font-sans text-sm font-medium ${
+                  className={`w-10 h-10 rounded-md border flex items-center justify-center cursor-pointer transition-colors font-sans text-sm font-medium ${
                     p === page
                       ? "bg-electric-blue border-electric-blue text-white"
                       : "border-gray-200 bg-white text-gray-600 hover:border-electric-blue hover:text-electric-blue"
                   }`}
                   onClick={() => setPage(p)}
                 >
-                  {p}
+                  <p className="overflow-y-hidden">{p}</p>
                 </button>
               );
             })}
