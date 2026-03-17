@@ -3,8 +3,6 @@ import { useState, useMemo, useEffect } from "react";
 import { useParams } from "next/navigation";
 import {
   Search,
-  ChevronUp,
-  ChevronDown,
   ChevronsLeft,
   ChevronsRight,
   ChevronLeft,
@@ -28,95 +26,38 @@ export default function DataAnalysisPage() {
     : "ALL";
 
   const [search, setSearch] = useState("");
-  const [sortField, setSortField] = useState("id");
-  const [sortDir, setSortDir] = useState("asc");
-  const [riskFilter, setRiskFilter] = useState("all");
-  const [resultFilter, setResultFilter] = useState("all");
+  const [resultFilter, setResultFilter] = useState("");
   const [page, setPage] = useState(1);
   const [perPage, setPerPage] = useState(50);
   const [selectedCustomer, setSelectedCustomer] = useState(null);
   const [customers, setCustomers] = useState([]);
   const [meta, setMeta] = useState({});
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const fetchCustomers = async () => {
+      setLoading(true);
       const response = await fetch(
-        `https://api.p2tlanalisa.web.id/api/pelanggan?jenis_meter=${typeParam}&page=${page}&per_page=${perPage}&idpel=${search}`,
+        `https://api.p2tlanalisa.web.id/api/pelanggan?jenis_meter=${typeParam}&page=${page}&per_page=${perPage}&idpel=${search}&status=${resultFilter}`,
       );
 
       const json = await response.json();
 
       setCustomers(json.data || []);
       setMeta(json.meta || {});
+      setLoading(false);
     };
 
     fetchCustomers();
-  }, [page, typeParam, perPage, search]);
+  }, [page, typeParam, perPage, search, resultFilter]);
 
   useEffect(() => {
     setPage(1);
   }, [typeParam]);
 
-  const filtered = useMemo(() => {
-    let data = [...customers];
-
-    if (search) {
-      const s = search.toLowerCase();
-      data = data.filter(
-        (c) =>
-          c.id?.toLowerCase().includes(s) || c.name?.toLowerCase().includes(s),
-      );
-    }
-
-    if (riskFilter !== "all") {
-      data = data.filter((c) => c.risk === riskFilter);
-    }
-
-    if (resultFilter !== "all") {
-      data = data.filter((c) => c.result === resultFilter);
-    }
-
-    data.sort((a, b) => {
-      let va = a[sortField];
-      let vb = b[sortField];
-
-      if (typeof va === "string") {
-        va = va.toLowerCase();
-        vb = vb.toLowerCase();
-      }
-
-      if (va < vb) return sortDir === "asc" ? -1 : 1;
-      if (va > vb) return sortDir === "asc" ? 1 : -1;
-
-      return 0;
-    });
-
-    return data;
-  }, [customers, search, sortField, sortDir, riskFilter, resultFilter]);
-
+  const filtered = [...customers];
   const paged = filtered;
   const totalPages = meta.last_page || 1;
-
-  const handleSort = (field) => {
-    if (sortField === field) {
-      setSortDir((d) => (d === "asc" ? "desc" : "asc"));
-    } else {
-      setSortField(field);
-      setSortDir("asc");
-    }
-  };
-
-  const SortIcon = ({ field }) => {
-    if (sortField !== field) {
-      return <ChevronUp size={12} className="opacity-30" />;
-    }
-
-    return sortDir === "asc" ? (
-      <ChevronUp size={12} />
-    ) : (
-      <ChevronDown size={12} />
-    );
-  };
 
   const getColumns = () => {
     switch (typeParam?.toLowerCase()) {
@@ -191,27 +132,13 @@ export default function DataAnalysisPage() {
         <div className="flex flex-wrap items-center gap-3">
           <select
             className="px-3 py-2 border-[1.5px] border-gray-200 rounded-lg text-sm font-sans text-gray-600 bg-white cursor-pointer outline-none focus:border-electric-blue flex-1 md:flex-none"
-            value={riskFilter}
-            onChange={(e) => {
-              setRiskFilter(e.target.value);
-              setPage(1);
-            }}
-          >
-            <option value="all">All Risks</option>
-            <option value="low">Low</option>
-            <option value="medium">Medium</option>
-            <option value="normal">Normal</option>
-            <option value="high">High</option>
-          </select>
-          <select
-            className="px-3 py-2 border-[1.5px] border-gray-200 rounded-lg text-sm font-sans text-gray-600 bg-white cursor-pointer outline-none focus:border-electric-blue flex-1 md:flex-none"
             value={resultFilter}
             onChange={(e) => {
               setResultFilter(e.target.value);
               setPage(1);
             }}
           >
-            <option value="all">All Results</option>
+            <option value="">All Results</option>
             <option value="NORMAL">Normal</option>
             <option value="SUSPECT">Suspect</option>
             <option value="ANOMALY">Anomaly</option>
@@ -240,19 +167,27 @@ export default function DataAnalysisPage() {
                 {columns.map((col) => (
                   <th
                     key={col.key}
-                    onClick={() => handleSort(col.key)}
-                    className="px-4 py-3.5 text-left text-xs font-bold uppercase tracking-wider text-gray-500 bg-gray-50 border-b-2 border-gray-200 cursor-pointer select-none hover:text-electric-blue whitespace-nowrap"
+                    className="px-4 py-3.5 text-left text-xs font-bold uppercase tracking-wider text-gray-500 bg-gray-50 border-b-2 border-gray-200 cursor-pointer select-none whitespace-nowrap"
                   >
-                    <div className="flex items-center gap-1.5">
-                      {col.label} <SortIcon field={col.key} />
-                    </div>
+                    <div className="flex items-center gap-1.5">{col.label}</div>
                   </th>
                 ))}
               </tr>
             </thead>
 
             <tbody>
-              {paged.length > 0 ? (
+              {loading ? (
+                <tr>
+                  <td
+                    colSpan={columns.length}
+                    className="px-4 py-3.5 text-sm border-b border-gray-100"
+                  >
+                    <div className="flex items-center justify-center h-10">
+                      <div className="animate-spin rounded-full h-6 w-6 border-4 border-t-electric-blue border-b-transparent"></div>
+                    </div>
+                  </td>
+                </tr>
+              ) : paged.length > 0 ? (
                 paged.map((customer) => (
                   <tr
                     key={customer.id}
@@ -289,23 +224,9 @@ export default function DataAnalysisPage() {
                         return (
                           <td
                             key={col.key}
-                            className="px-4 py-3.5 text-sm border-b border-gray-100"
+                            className={`px-4 py-3.5 text-sm border-b border-gray-100`}
                           >
-                            <Badge
-                              variant={
-                                customer.risk === "high"
-                                  ? "danger"
-                                  : customer.risk === "medium"
-                                    ? "warning"
-                                    : customer.risk === "low"
-                                      ? "success"
-                                      : customer.risk === "normal"
-                                        ? "primary"
-                                        : "default"
-                              }
-                            >
-                              {customer.risk}
-                            </Badge>
+                            {customer.risk_score}
                           </td>
                         );
                       }

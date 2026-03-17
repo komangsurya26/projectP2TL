@@ -19,11 +19,11 @@ export default function CustomerDetail({ customer, onClose }) {
   const [activeTab, setActiveTab] = useState("usage");
   if (!customer) return null;
 
-  const riskColorMap = {
-    high: "text-danger",
-    medium: "text-warning",
-    low: "text-success",
-    unknown: "text-black",
+  const resultColorMap = {
+    HIGH: "text-danger",
+    MEDIUM: "text-warning",
+    LOW_CONSUMPTION: "text-success",
+    NORMAL: "text-black",
   };
 
   const getTabs = () => {
@@ -114,16 +114,16 @@ export default function CustomerDetail({ customer, onClose }) {
               </div>
             </div>
             <div className="p-4 bg-gray-50 rounded-lg text-center flex flex-col justify-center">
-              <div
-                className={`text-2xl font-extrabold ${riskColorMap[customer.risk]} overflow-y-auto`}
-              >
-                {customer.risk.charAt(0).toUpperCase() + customer.risk.slice(1)}
+              <div className={`text-2xl font-extrabold overflow-y-auto`}>
+                {customer.risk_score}
               </div>
-              <div className="text-xs text-gray-500 mt-0.5">Risk Level</div>
+              <div className="text-xs text-gray-500 mt-0.5">Risk Score</div>
             </div>
             <div className="p-4 bg-gray-50 rounded-lg text-center flex flex-col justify-center">
-              <div className="text-2xl font-extrabold text-dark-blue overflow-y-auto">
-                {customer.result || "Normal"}
+              <div
+                className={`text-2xl font-extrabold ${resultColorMap[customer.result]} overflow-y-auto`}
+              >
+                {customer.result}
               </div>
               <div className="text-xs text-gray-500 mt-0.5">
                 Inspection Result
@@ -132,7 +132,7 @@ export default function CustomerDetail({ customer, onClose }) {
           </div>
 
           {/* Anomaly alert */}
-          {customer.risk === "high" && (
+          {customer.result === "ANOMALY" && (
             <div className="flex items-start gap-3 p-4 bg-danger/6 border border-danger/15 rounded-lg mb-6 text-sm text-danger">
               <AlertTriangle size={18} className="mt-0.5 shrink-0" />
               <span>
