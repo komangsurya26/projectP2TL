@@ -200,6 +200,7 @@ export default function DataAnalysisPage() {
             <option value="all">All Risks</option>
             <option value="low">Low</option>
             <option value="medium">Medium</option>
+            <option value="normal">Normal</option>
             <option value="high">High</option>
           </select>
           <select
@@ -211,9 +212,10 @@ export default function DataAnalysisPage() {
             }}
           >
             <option value="all">All Results</option>
-            <option value="Normal">Normal</option>
-            <option value="Suspect">Suspect</option>
-            <option value="Anomaly">Anomaly</option>
+            <option value="NORMAL">Normal</option>
+            <option value="SUSPECT">Suspect</option>
+            <option value="ANOMALY">Anomaly</option>
+            <option value="LOW_CONSUMPTION">Low</option>
           </select>
           <select
             className="px-3 py-2 border-[1.5px] border-gray-200 rounded-lg text-sm font-sans text-gray-600 bg-white cursor-pointer outline-none focus:border-electric-blue min-w-[100px]"
