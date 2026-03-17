@@ -275,8 +275,8 @@ export default function DataAnalysisPage() {
                                     : customer.result === "LOW_CONSUMPTION"
                                       ? "success"
                                       : customer.result === "NORMAL"
-                                        ? "info"
-                                        : "secondary"
+                                        ? "primary"
+                                        : "default"
                               }
                             >
                               {customer.result.toLowerCase()}
@@ -300,8 +300,8 @@ export default function DataAnalysisPage() {
                                     : customer.risk === "low"
                                       ? "success"
                                       : customer.risk === "normal"
-                                        ? "info"
-                                        : "secondary"
+                                        ? "primary"
+                                        : "default"
                               }
                             >
                               {customer.risk}
