@@ -119,7 +119,7 @@ export default function DataAnalysisPage() {
           <Search size={18} className="text-gray-400 min-w-[18px]" />
           <input
             type="text"
-            placeholder="Search by ID or name..."
+            placeholder="Search by ID or Meter Number..."
             value={search}
             onChange={(e) => {
               setSearch(e.target.value);
