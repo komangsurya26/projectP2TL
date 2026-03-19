@@ -54,7 +54,7 @@ export default function CustomerDetail({ customer, onClose }) {
     }
 
     if (customer?.meterType === "ami") {
-      monthlyUsageAmi();
+      // monthlyUsageAmi();
     }
   }, [customer]);
 
