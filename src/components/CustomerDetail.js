@@ -46,6 +46,14 @@ export default function CustomerDetail({ customer, onClose }) {
     setTokenTrend(json.data);
   };
 
+  const monthlyUsageAmi = async () => {
+    const res = await fetch(
+      `https://api.p2tlanalisa.web.id/api/meters/${customer.meterNumber}/ami-usage`,
+    );
+    const json = await res.json();
+    setMonthlyUsage(json.data);
+  };
+
   useEffect(() => {
     if (customer?.meterType === "prabayar") {
       fetchPurchaseHistory();
@@ -54,7 +62,7 @@ export default function CustomerDetail({ customer, onClose }) {
     }
 
     if (customer?.meterType === "ami") {
-      // monthlyUsageAmi();
+      monthlyUsageAmi();
     }
   }, [customer]);
 
@@ -218,7 +226,7 @@ export default function CustomerDetail({ customer, onClose }) {
               <h4 className="text-sm font-semibold text-dark-blue mb-4">
                 Monthly Energy Usage (kWh)
               </h4>
-              <UsageTrendChart monthlyUsage={customer.monthlyUsage || []} />
+              <UsageTrendChart monthlyUsage={monthlyUsage} />
             </div>
           )}
 
