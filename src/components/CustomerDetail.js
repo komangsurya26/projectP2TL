@@ -8,17 +8,17 @@ import {
   PowerFactorTrendChart,
   TokenPurchaseTrendChart,
 } from "./Charts";
-import {
-  measurementHistory,
-  dataChangeHistory,
-  billingUsageHistory,
-} from "@/data/mockData";
+import { dataChangeHistory, billingUsageHistory } from "@/data/mockData";
 
 export default function CustomerDetail({ customer, onClose }) {
   const [activeTab, setActiveTab] = useState("usage");
   const [purchaseHistory, setPurchaseHistory] = useState([]);
   const [monthlyUsage, setMonthlyUsage] = useState([]);
+  const [yearlyUsage, setYearlyUsage] = useState([]);
   const [tokenTrend, setTokenTrend] = useState([]);
+  const [voltageTrend, setVoltageTrend] = useState([]);
+  const [powerFactorTrend, setPowerFactorTrend] = useState([]);
+  const [measurementHistory, setMeasurementHistory] = useState([]);
 
   if (!customer) return null;
 
@@ -54,6 +54,38 @@ export default function CustomerDetail({ customer, onClose }) {
     setMonthlyUsage(json.data);
   };
 
+  const yearlyUsageAmi = async () => {
+    const res = await fetch(
+      `https://api.p2tlanalisa.web.id/api/meters/${customer.meterNumber}/ami-yearly-usage`,
+    );
+    const json = await res.json();
+    setYearlyUsage(json.data);
+  };
+
+  const voltageTrendAmi = async () => {
+    const res = await fetch(
+      `https://api.p2tlanalisa.web.id/api/meters/${customer.meterNumber}/voltage-trend`,
+    );
+    const json = await res.json();
+    setVoltageTrend(json.data);
+  };
+
+  const powerFactorTrendAmi = async () => {
+    const res = await fetch(
+      `https://api.p2tlanalisa.web.id/api/meters/${customer.meterNumber}/power-factor-trend`,
+    );
+    const json = await res.json();
+    setPowerFactorTrend(json.data);
+  };
+
+  const measurementHistoryAmi = async () => {
+    const res = await fetch(
+      `https://api.p2tlanalisa.web.id/api/meters/${customer.meterNumber}/measurement-history`,
+    );
+    const json = await res.json();
+    setMeasurementHistory(json.data);
+  };
+
   useEffect(() => {
     if (customer?.meterType === "prabayar") {
       fetchPurchaseHistory();
@@ -63,6 +95,10 @@ export default function CustomerDetail({ customer, onClose }) {
 
     if (customer?.meterType === "ami") {
       monthlyUsageAmi();
+      yearlyUsageAmi();
+      voltageTrendAmi();
+      powerFactorTrendAmi();
+      measurementHistoryAmi();
     }
   }, [customer]);
 
@@ -86,7 +122,7 @@ export default function CustomerDetail({ customer, onClose }) {
       case "prabayar":
         return [
           { key: "usage", label: "Token Purchases" },
-          { key: "yearly", label: "Monthly Usage" },
+          { key: "monthly", label: "Monthly Usage" },
           { key: "token_history", label: "Purchase History" },
         ];
       default:
@@ -230,7 +266,7 @@ export default function CustomerDetail({ customer, onClose }) {
             </div>
           )}
 
-          {activeTab === "yearly" && customer.meterType === "prabayar" && (
+          {activeTab === "monthly" && customer.meterType === "prabayar" && (
             <div>
               <h4 className="text-sm font-semibold text-dark-blue mb-4">
                 Monthly Energy Usage (kWh)
@@ -244,7 +280,7 @@ export default function CustomerDetail({ customer, onClose }) {
               <h4 className="text-sm font-semibold text-dark-blue mb-4">
                 Yearly Consumption Trend (kWh)
               </h4>
-              <YearlyTrendChart yearlyUsage={customer.yearlyUsage || []} />
+              <YearlyTrendChart yearlyUsage={yearlyUsage} />
             </div>
           )}
 
@@ -253,7 +289,7 @@ export default function CustomerDetail({ customer, onClose }) {
               <h4 className="text-sm font-semibold text-dark-blue mb-4">
                 Voltage Trend (V)
               </h4>
-              <VoltageTrendChart />
+              <VoltageTrendChart voltageTrend={voltageTrend} />
             </div>
           )}
 
@@ -262,7 +298,7 @@ export default function CustomerDetail({ customer, onClose }) {
               <h4 className="text-sm font-semibold text-dark-blue mb-4">
                 Power Factor Trend
               </h4>
-              <PowerFactorTrendChart />
+              <PowerFactorTrendChart powerFactorTrend={powerFactorTrend} />
             </div>
           )}
 

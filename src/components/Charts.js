@@ -137,9 +137,9 @@ export function UsageTrendChart({ monthlyUsage }) {
 }
 
 export function YearlyTrendChart({ yearlyUsage }) {
-  const data = [2022, 2023, 2024, 2025, 2026].map((y, i) => ({
-    year: y.toString(),
-    usage: yearlyUsage[i] || 0,
+  const data = yearlyUsage.map((y) => ({
+    year: y.year,
+    usage: y.total_usage,
   }));
 
   return (
@@ -173,21 +173,11 @@ export function YearlyTrendChart({ yearlyUsage }) {
   );
 }
 
-export function VoltageTrendChart({ data }) {
-  // Mock data mapping
-  const voltageData = data || [
-    { time: "00:00", voltage: 220 },
-    { time: "04:00", voltage: 221 },
-    { time: "08:00", voltage: 219 },
-    { time: "12:00", voltage: 218 },
-    { time: "16:00", voltage: 222 },
-    { time: "20:00", voltage: 220 },
-  ];
-
+export function VoltageTrendChart({ voltageTrend }) {
   return (
     <ResponsiveContainer width="100%" height={200}>
       <LineChart
-        data={voltageData}
+        data={voltageTrend}
         margin={{ top: 10, right: 10, left: -20, bottom: 0 }}
       >
         <CartesianGrid
@@ -221,20 +211,11 @@ export function VoltageTrendChart({ data }) {
   );
 }
 
-export function PowerFactorTrendChart({ data }) {
-  const pfData = data || [
-    { time: "00:00", pf: 0.95 },
-    { time: "04:00", pf: 0.96 },
-    { time: "08:00", pf: 0.94 },
-    { time: "12:00", pf: 0.98 },
-    { time: "16:00", pf: 0.92 },
-    { time: "20:00", pf: 0.95 },
-  ];
-
+export function PowerFactorTrendChart({ powerFactorTrend }) {
   return (
     <ResponsiveContainer width="100%" height={200}>
       <LineChart
-        data={pfData}
+        data={powerFactorTrend}
         margin={{ top: 10, right: 10, left: -20, bottom: 0 }}
       >
         <CartesianGrid
@@ -257,7 +238,7 @@ export function PowerFactorTrendChart({ data }) {
         <Tooltip contentStyle={tooltipStyle} />
         <Line
           type="stepAfter"
-          dataKey="pf"
+          dataKey="power_factor"
           stroke="#8B5CF6"
           strokeWidth={2}
           dot={{ r: 3, fill: "#8B5CF6" }}
