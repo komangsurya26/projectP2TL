@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { X, MapPin, Phone, AlertTriangle } from "lucide-react";
 import {
   UsageTrendChart,
@@ -11,13 +11,52 @@ import {
 import {
   measurementHistory,
   dataChangeHistory,
-  tokenPurchaseHistory,
   billingUsageHistory,
 } from "@/data/mockData";
 
 export default function CustomerDetail({ customer, onClose }) {
   const [activeTab, setActiveTab] = useState("usage");
+  const [purchaseHistory, setPurchaseHistory] = useState([]);
+  const [monthlyUsage, setMonthlyUsage] = useState([]);
+  const [tokenTrend, setTokenTrend] = useState([]);
+
   if (!customer) return null;
+
+  const fetchPurchaseHistory = async () => {
+    const res = await fetch(
+      `https://api.p2tlanalisa.web.id/api/meters/${customer.meterNumber}/purchase-history`,
+    );
+    const json = await res.json();
+    setPurchaseHistory(json.data);
+  };
+
+  const monthlyUsagePrabayar = async () => {
+    const res = await fetch(
+      `https://api.p2tlanalisa.web.id/api/meters/${customer.meterNumber}/monthly-usage`,
+    );
+    const json = await res.json();
+    setMonthlyUsage(json.data);
+  };
+
+  const tokenTrendPrabayar = async () => {
+    const res = await fetch(
+      `https://api.p2tlanalisa.web.id/api/meters/${customer.meterNumber}/token-trend`,
+    );
+    const json = await res.json();
+    setTokenTrend(json.data);
+  };
+
+  useEffect(() => {
+    if (customer?.meterType === "prabayar") {
+      fetchPurchaseHistory();
+      monthlyUsagePrabayar();
+      tokenTrendPrabayar();
+    }
+
+    if (customer?.meterType === "ami") {
+      monthlyUsageAmi();
+    }
+  }, [customer]);
 
   const resultColorMap = {
     HIGH: "text-danger",
@@ -170,7 +209,7 @@ export default function CustomerDetail({ customer, onClose }) {
               <h4 className="text-sm font-semibold text-dark-blue mb-4">
                 Token Purchase & Frequency Trend
               </h4>
-              <TokenPurchaseTrendChart />
+              <TokenPurchaseTrendChart tokenTrend={tokenTrend} />
             </div>
           )}
 
@@ -188,7 +227,7 @@ export default function CustomerDetail({ customer, onClose }) {
               <h4 className="text-sm font-semibold text-dark-blue mb-4">
                 Monthly Energy Usage (kWh)
               </h4>
-              <UsageTrendChart monthlyUsage={customer.monthlyUsage || []} />
+              <UsageTrendChart monthlyUsage={monthlyUsage} />
             </div>
           )}
 
@@ -280,7 +319,7 @@ export default function CustomerDetail({ customer, onClose }) {
                   </tr>
                 </thead>
                 <tbody>
-                  {tokenPurchaseHistory.map((t, i) => (
+                  {purchaseHistory.map((t, i) => (
                     <tr key={i}>
                       <td className="px-4 py-3 text-sm text-gray-700 border-b border-gray-100">
                         {t.date}

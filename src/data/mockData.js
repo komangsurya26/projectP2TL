@@ -11,7 +11,6 @@ export const customers = [
     meterType: "ami",
     meterNumber: "51002345678",
     monthlyUsage: [320, 310, 340, 325, 350, 330, 345, 360, 320, 340, 335, 350],
-    yearlyUsage: [3800, 3900, 4020, 3950, 4100],
   },
 ];
 

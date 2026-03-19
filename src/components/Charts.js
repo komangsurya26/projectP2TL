@@ -98,24 +98,7 @@ export function RiskBarChart({ data }) {
 }
 
 export function UsageTrendChart({ monthlyUsage }) {
-  const data = [
-    "Jan",
-    "Feb",
-    "Mar",
-    "Apr",
-    "May",
-    "Jun",
-    "Jul",
-    "Aug",
-    "Sep",
-    "Oct",
-    "Nov",
-    "Dec",
-  ].map((m, i) => ({
-    month: m,
-    usage: monthlyUsage[i] || 0,
-  }));
-
+  const data = monthlyUsage;
   return (
     <ResponsiveContainer width="100%" height={250}>
       <AreaChart
@@ -130,7 +113,7 @@ export function UsageTrendChart({ monthlyUsage }) {
         </defs>
         <CartesianGrid strokeDasharray="3 3" stroke="#E2E8F0" />
         <XAxis
-          dataKey="month"
+          dataKey="label"
           tick={{ fontSize: 11, fill: "#94A3B8" }}
           axisLine={{ stroke: "#E2E8F0" }}
         />
@@ -285,20 +268,11 @@ export function PowerFactorTrendChart({ data }) {
   );
 }
 
-export function TokenPurchaseTrendChart({ data }) {
-  const tokenData = data || [
-    { month: "Jan", energy: 150, frequency: 2 },
-    { month: "Feb", energy: 200, frequency: 3 },
-    { month: "Mar", energy: 180, frequency: 2 },
-    { month: "Apr", energy: 250, frequency: 4 },
-    { month: "May", energy: 120, frequency: 1 },
-    { month: "Jun", energy: 300, frequency: 5 },
-  ];
-
+export function TokenPurchaseTrendChart({ tokenTrend }) {
   return (
     <ResponsiveContainer width="100%" height={250}>
       <BarChart
-        data={tokenData}
+        data={tokenTrend}
         margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
       >
         <CartesianGrid
@@ -307,7 +281,7 @@ export function TokenPurchaseTrendChart({ data }) {
           vertical={false}
         />
         <XAxis
-          dataKey="month"
+          dataKey="label"
           tick={{ fontSize: 11, fill: "#94A3B8" }}
           axisLine={{ stroke: "#E2E8F0" }}
         />
