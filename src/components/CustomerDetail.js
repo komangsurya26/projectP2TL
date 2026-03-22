@@ -106,7 +106,7 @@ export default function CustomerDetail({ customer, onClose }) {
     ANOMALY: "text-danger",
     SUSPECT: "text-warning",
     LOW_CONSUMPTION: "text-success",
-    NORMAL: "text-primary",
+    NORMAL: "text-electric-blue",
   };
 
   const getTabs = () => {
