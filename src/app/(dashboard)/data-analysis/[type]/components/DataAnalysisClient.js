@@ -188,9 +188,9 @@ export default function DataAnalysisPage() {
                   </td>
                 </tr>
               ) : paged.length > 0 ? (
-                paged.map((customer) => (
+                paged.map((customer, index) => (
                   <tr
-                    key={customer.id}
+                    key={index}
                     onClick={() => setSelectedCustomer(customer)}
                     className="transition-colors cursor-pointer hover:bg-electric-blue/4"
                   >

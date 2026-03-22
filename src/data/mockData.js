@@ -6,11 +6,10 @@ export const customers = [
     power: "2200 VA",
     result: "Normal",
     risk: "low",
-    address: "Jl. Merdeka No. 45, Denpasar",
+    address: "Denpasar",
     phone: "0812-3456-7890",
     meterType: "ami",
     meterNumber: "51002345678",
-    monthlyUsage: [320, 310, 340, 325, 350, 330, 345, 360, 320, 340, 335, 350],
   },
 ];
 

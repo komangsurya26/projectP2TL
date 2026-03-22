@@ -1,4 +1,5 @@
 "use client";
+import toast from "react-hot-toast";
 import { useState, useRef } from "react";
 import {
   Upload,
@@ -6,6 +7,7 @@ import {
   CheckCircle,
   XCircle,
   Download,
+  Loader2,
 } from "lucide-react";
 import { uploadHistory } from "@/data/mockData";
 
@@ -13,6 +15,7 @@ export default function UploadPage() {
   const [dragover, setDragover] = useState(false);
   const [uploadedFile, setUploadedFile] = useState(null);
   const [uploadStatus, setUploadStatus] = useState(null);
+  const [template, setTemplate] = useState("");
   const fileRef = useRef(null);
 
   const handleDrop = (e) => {
@@ -28,12 +31,51 @@ export default function UploadPage() {
   };
 
   const processFile = (file) => {
-    const isExcel =
-      file.name.endsWith(".xlsx") ||
-      file.name.endsWith(".xls") ||
-      file.name.endsWith(".csv");
+    const isCSV = file.name.endsWith(".csv");
     setUploadedFile(file);
-    setUploadStatus(isExcel ? "success" : "error");
+    setUploadStatus(isCSV ? "success" : "error");
+  };
+
+  const endpoint = {
+    ami: "upload-ami",
+    dil: "upload-dil",
+  };
+
+  const handleUpload = async () => {
+    if (!uploadedFile) return;
+
+    if (!template) {
+      toast.error("Pilih jenis template yang ingin diupload");
+      return;
+    }
+
+    try {
+      setUploadStatus("processing");
+
+      const formData = new FormData();
+      formData.append("file", uploadedFile);
+
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/${endpoint[template]}`,
+        {
+          method: "POST",
+          body: formData,
+        },
+      );
+
+      const data = await res.json();
+
+      if (data.status === "success") {
+        toast.success(data.message);
+        setUploadStatus("success");
+      } else {
+        toast.error(data.message);
+        setUploadStatus("error");
+      }
+    } catch (err) {
+      toast.error("Upload failed");
+      setUploadStatus("error");
+    }
   };
 
   return (
@@ -41,7 +83,7 @@ export default function UploadPage() {
       <div className="mb-8">
         <h1 className="text-2xl font-bold text-dark-blue mb-1">Upload Data</h1>
         <p className="text-sm text-gray-500">
-          Upload Excel files for P2TL inspection data analysis
+          Upload CSV files for P2TL inspection data analysis
         </p>
       </div>
 
@@ -73,12 +115,12 @@ export default function UploadPage() {
               from your computer
             </p>
             <p className="mt-2 text-xs text-gray-400">
-              Supports .xlsx, .xls, .csv (max 50MB)
+              Supports .csv (max 50MB)
             </p>
             <input
               ref={fileRef}
               type="file"
-              accept=".xlsx,.xls,.csv"
+              accept=".csv"
               className="hidden"
               onChange={handleFileSelect}
             />
@@ -88,10 +130,12 @@ export default function UploadPage() {
           {uploadedFile && (
             <div
               className={`flex items-center gap-3 p-4 rounded-lg mt-4
-              ${uploadStatus === "success" ? "bg-success/8 border border-success/20 text-success" : "bg-danger/8 border border-danger/20 text-danger"}`}
+              ${uploadStatus === "success" ? "bg-success/8 border border-success/20 text-success" : uploadStatus === "processing" ? "bg-warning/8 border border-warning/20 text-warning" : "bg-danger/8 border border-danger/20 text-danger"}`}
             >
               {uploadStatus === "success" ? (
                 <CheckCircle size={20} />
+              ) : uploadStatus === "processing" ? (
+                <Loader2 size={20} />
               ) : (
                 <XCircle size={20} />
               )}
@@ -103,20 +147,37 @@ export default function UploadPage() {
                 <div className="text-xs mt-1">
                   {uploadStatus === "success"
                     ? "File validated successfully. Ready to process."
-                    : "Invalid file format. Please upload an Excel file."}
+                    : uploadStatus === "processing"
+                      ? "File is being processed"
+                      : "Invalid file format. Please upload a CSV file."}
                 </div>
               </div>
             </div>
           )}
 
           {/* Buttons */}
-          <div className="flex gap-4 mt-6">
+          <div className="flex gap-4 mt-6 md:flex-row flex-col">
             <button
-              disabled={uploadStatus !== "success"}
+              onClick={handleUpload}
+              disabled={!uploadedFile || uploadStatus === "processing"}
               className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-semibold font-sans cursor-pointer border-none transition-all bg-linear-to-br from-electric-blue to-[#1976D2] text-white hover:-translate-y-0.5 hover:shadow-lg hover:shadow-electric-blue/30 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:translate-y-0 disabled:hover:shadow-none"
             >
-              <Upload size={16} /> Upload & Process
+              <Upload size={16} />
+              {uploadStatus === "processing"
+                ? "Processing..."
+                : "Upload & Process"}
             </button>
+            <div>
+              <select
+                value={template}
+                onChange={(e) => setTemplate(e.target.value)}
+                className="w-full h-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-electric-blue"
+              >
+                <option value="">Pilih Jenis Template</option>
+                <option value="ami">Data AMI</option>
+                <option value="dil">Data DIL</option>
+              </select>
+            </div>
             <button className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-semibold font-sans cursor-pointer transition-all bg-white text-gray-700 border-[1.5px] border-gray-200 hover:border-gray-300 hover:bg-gray-50">
               <Download size={16} /> Download Template
             </button>
