@@ -22,9 +22,11 @@ export default function CustomerDetail({ customer, onClose }) {
 
   if (!customer) return null;
 
+  const url = process.env.NEXT_PUBLIC_API_URL;
+
   const fetchPurchaseHistory = async () => {
     const res = await fetch(
-      `https://api.p2tlanalisa.web.id/api/meters/${customer.meterNumber}/purchase-history`,
+      `${url}/meters/${customer.meterNumber}/purchase-history`,
     );
     const json = await res.json();
     setPurchaseHistory(json.data);
@@ -32,7 +34,7 @@ export default function CustomerDetail({ customer, onClose }) {
 
   const monthlyUsagePrabayar = async () => {
     const res = await fetch(
-      `https://api.p2tlanalisa.web.id/api/meters/${customer.meterNumber}/monthly-usage`,
+      `${url}/meters/${customer.meterNumber}/monthly-usage`,
     );
     const json = await res.json();
     setMonthlyUsage(json.data);
@@ -40,23 +42,21 @@ export default function CustomerDetail({ customer, onClose }) {
 
   const tokenTrendPrabayar = async () => {
     const res = await fetch(
-      `https://api.p2tlanalisa.web.id/api/meters/${customer.meterNumber}/token-trend`,
+      `${url}/meters/${customer.meterNumber}/token-trend`,
     );
     const json = await res.json();
     setTokenTrend(json.data);
   };
 
   const monthlyUsageAmi = async () => {
-    const res = await fetch(
-      `https://api.p2tlanalisa.web.id/api/meters/${customer.meterNumber}/ami-usage`,
-    );
+    const res = await fetch(`${url}/meters/${customer.meterNumber}/ami-usage`);
     const json = await res.json();
     setMonthlyUsage(json.data);
   };
 
   const yearlyUsageAmi = async () => {
     const res = await fetch(
-      `https://api.p2tlanalisa.web.id/api/meters/${customer.meterNumber}/ami-yearly-usage`,
+      `${url}/meters/${customer.meterNumber}/ami-yearly-usage`,
     );
     const json = await res.json();
     setYearlyUsage(json.data);
@@ -64,7 +64,7 @@ export default function CustomerDetail({ customer, onClose }) {
 
   const voltageTrendAmi = async () => {
     const res = await fetch(
-      `https://api.p2tlanalisa.web.id/api/meters/${customer.meterNumber}/voltage-trend`,
+      `${url}/meters/${customer.meterNumber}/voltage-trend`,
     );
     const json = await res.json();
     setVoltageTrend(json.data);
@@ -72,7 +72,7 @@ export default function CustomerDetail({ customer, onClose }) {
 
   const powerFactorTrendAmi = async () => {
     const res = await fetch(
-      `https://api.p2tlanalisa.web.id/api/meters/${customer.meterNumber}/power-factor-trend`,
+      `${url}/meters/${customer.meterNumber}/power-factor-trend`,
     );
     const json = await res.json();
     setPowerFactorTrend(json.data);
@@ -80,7 +80,7 @@ export default function CustomerDetail({ customer, onClose }) {
 
   const measurementHistoryAmi = async () => {
     const res = await fetch(
-      `https://api.p2tlanalisa.web.id/api/meters/${customer.meterNumber}/measurement-history`,
+      `${url}/meters/${customer.meterNumber}/measurement-history`,
     );
     const json = await res.json();
     setMeasurementHistory(json.data);
@@ -103,10 +103,10 @@ export default function CustomerDetail({ customer, onClose }) {
   }, [customer]);
 
   const resultColorMap = {
-    HIGH: "text-danger",
-    MEDIUM: "text-warning",
+    ANOMALY: "text-danger",
+    SUSPECT: "text-warning",
     LOW_CONSUMPTION: "text-success",
-    NORMAL: "text-black",
+    NORMAL: "text-primary",
   };
 
   const getTabs = () => {
@@ -363,7 +363,7 @@ export default function CustomerDetail({ customer, onClose }) {
                   </tr>
                 </thead>
                 <tbody>
-                  {purchaseHistory.map((t, i) => (
+                  {purchaseHistory?.map((t, i) => (
                     <tr key={i}>
                       <td className="px-4 py-3 text-sm text-gray-700 border-b border-gray-100">
                         {t.date}

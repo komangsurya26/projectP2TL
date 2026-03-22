@@ -38,7 +38,7 @@ export default function DataAnalysisPage() {
     const fetchCustomers = async () => {
       setLoading(true);
       const response = await fetch(
-        `https://api.p2tlanalisa.web.id/api/pelanggan?jenis_meter=${typeParam}&page=${page}&per_page=${perPage}&idpel=${search}&status=${resultFilter}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/pelanggan?jenis_meter=${typeParam}&page=${page}&per_page=${perPage}&idpel=${search}&status=${resultFilter}`,
       );
 
       const json = await response.json();
@@ -110,7 +110,7 @@ export default function DataAnalysisPage() {
           variant="primary"
           className="w-fit text-sm px-3 py-1 bg-electric-blue/10 text-electric-blue border-electric-blue/20"
         >
-          Total: {meta.total ?? filtered.length} Customers
+          Total: {meta.total?.toLocaleString() || 0} Customers
         </Badge>
       </div>
 
@@ -259,7 +259,7 @@ export default function DataAnalysisPage() {
         {/* PAGINATION UI TIDAK DIUBAH */}
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 p-4 border-t border-gray-100 bg-white">
           <div className="text-sm text-gray-500">
-            Total {meta.total ?? 0} results
+            Total {meta.total?.toLocaleString() || 0} results
           </div>
 
           <div className="flex items-center gap-1">
