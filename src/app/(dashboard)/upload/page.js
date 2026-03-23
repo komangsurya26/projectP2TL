@@ -49,31 +49,41 @@ export default function UploadPage() {
       return;
     }
 
+    setUploadStatus("processing");
+
     try {
-      setUploadStatus("processing");
+      const chunkSize = 5 * 1024 * 1024; // 5MB per chunk
+      const totalChunks = Math.ceil(uploadedFile.size / chunkSize);
 
-      const formData = new FormData();
-      formData.append("file", uploadedFile);
+      for (let i = 0; i < totalChunks; i++) {
+        const start = i * chunkSize;
+        const end = Math.min(start + chunkSize, uploadedFile.size);
 
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/${endpoint[template]}`,
-        {
-          method: "POST",
-          body: formData,
-        },
-      );
+        const chunk = uploadedFile.slice(start, end);
 
-      const data = await res.json();
+        const formData = new FormData();
+        formData.append("file", chunk, uploadedFile.name);
+        formData.append("chunkIndex", i);
+        formData.append("totalChunks", totalChunks);
 
-      if (data.status === "success") {
-        toast.success(data.message);
-        setUploadStatus("success");
-      } else {
-        toast.error(data.message);
-        setUploadStatus("error");
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/${endpoint[template]}`,
+          {
+            method: "POST",
+            body: formData,
+          },
+        );
+
+        const data = await res.json();
+        if (data.status === "error") {
+          throw new Error(data.message);
+        }
       }
+
+      toast.success("Upload selesai, file sedang diproses di server");
+      setUploadStatus("success");
     } catch (err) {
-      toast.error("Upload failed");
+      toast.error("Upload gagal, ada kesalahan pada server");
       setUploadStatus("error");
     }
   };
