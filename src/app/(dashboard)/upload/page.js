@@ -1,6 +1,6 @@
 "use client";
 import toast from "react-hot-toast";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import {
   Upload,
   FileSpreadsheet,
@@ -9,7 +9,6 @@ import {
   Download,
   Loader2,
 } from "lucide-react";
-import { uploadHistory } from "@/data/mockData";
 
 export default function UploadPage() {
   const [dragover, setDragover] = useState(false);
@@ -17,6 +16,19 @@ export default function UploadPage() {
   const [uploadStatus, setUploadStatus] = useState(null);
   const [template, setTemplate] = useState("");
   const fileRef = useRef(null);
+  const [uploadHistory, setUploadHistory] = useState([]);
+
+  const fetchUploadHistory = async () => {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/upload-history`,
+    );
+    const json = await res.json();
+    setUploadHistory(json.data);
+  };
+
+  useEffect(() => {
+    fetchUploadHistory();
+  }, []);
 
   const handleDrop = (e) => {
     e.preventDefault();
