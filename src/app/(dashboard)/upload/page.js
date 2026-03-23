@@ -76,7 +76,9 @@ export default function UploadPage() {
 
         const data = await res.json();
         if (data.status === "error") {
-          throw new Error(data.message);
+          toast.error(data.message);
+          setUploadStatus("error");
+          return;
         }
       }
 
@@ -125,7 +127,7 @@ export default function UploadPage() {
               from your computer
             </p>
             <p className="mt-2 text-xs text-gray-400">
-              Supports .csv (max 50MB)
+              Supports .csv (max 500MB)
             </p>
             <input
               ref={fileRef}
