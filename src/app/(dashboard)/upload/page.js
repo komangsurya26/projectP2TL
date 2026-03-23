@@ -48,9 +48,15 @@ export default function UploadPage() {
     setUploadStatus(isCSV ? "success" : "error");
   };
 
-  const endpoint = {
-    ami: "upload-ami",
-    dil: "upload-dil",
+  const handleDownloadTemplate = () => {
+    if (!template) {
+      toast.error("Pilih jenis template yang ingin di-download");
+      return;
+    }
+    window.open(
+      `${process.env.NEXT_PUBLIC_API_URL}/template-${template}`,
+      "_blank",
+    );
   };
 
   const handleUpload = async () => {
@@ -79,7 +85,7 @@ export default function UploadPage() {
         formData.append("totalChunks", totalChunks);
 
         const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/${endpoint[template]}`,
+          `${process.env.NEXT_PUBLIC_API_URL}/upload-${template}`,
           {
             method: "POST",
             body: formData,
@@ -129,7 +135,7 @@ export default function UploadPage() {
               <Upload size={32} />
             </div>
             <h3 className="text-lg font-semibold text-dark-blue mb-2">
-              Drag & drop your Excel file here
+              Drag & drop your CSV file here
             </h3>
             <p className="text-sm text-gray-500">
               or{" "}
@@ -202,7 +208,10 @@ export default function UploadPage() {
                 <option value="dil">Data DIL</option>
               </select>
             </div>
-            <button className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-semibold font-sans cursor-pointer transition-all bg-white text-gray-700 border-[1.5px] border-gray-200 hover:border-gray-300 hover:bg-gray-50">
+            <button
+              onClick={handleDownloadTemplate}
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-semibold font-sans cursor-pointer transition-all bg-white text-gray-700 border-[1.5px] border-gray-200 hover:border-gray-300 hover:bg-gray-50"
+            >
               <Download size={16} /> Download Template
             </button>
           </div>
