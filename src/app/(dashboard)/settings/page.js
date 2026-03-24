@@ -2,8 +2,10 @@
 import { User, Bell, Database } from "lucide-react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
+import { useAuth } from "@/context/AuthContext";
 
 export default function SettingsPage() {
+  const { user } = useAuth();
   return (
     <>
       <div className="mb-8">
@@ -32,7 +34,7 @@ export default function SettingsPage() {
                 </label>
                 <input
                   className="w-full px-4 py-2.5 border-[1.5px] border-gray-200 rounded-lg text-sm font-sans text-gray-700 bg-white outline-none transition-all focus:border-electric-blue focus:shadow-[0_0_0_3px_rgba(33,150,243,0.12)]"
-                  defaultValue="Admin Staff"
+                  defaultValue={user?.name}
                 />
               </div>
               <div className="flex flex-col gap-2">
@@ -41,7 +43,7 @@ export default function SettingsPage() {
                 </label>
                 <input
                   className="w-full px-4 py-2.5 border-[1.5px] border-gray-200 rounded-lg text-sm font-sans text-gray-700 bg-white outline-none transition-all focus:border-electric-blue focus:shadow-[0_0_0_3px_rgba(33,150,243,0.12)]"
-                  defaultValue="admin@pln.co.id"
+                  defaultValue={user?.email}
                 />
               </div>
               <div className="flex flex-col gap-2">
@@ -50,17 +52,8 @@ export default function SettingsPage() {
                 </label>
                 <input
                   className="w-full px-4 py-2.5 border-[1.5px] border-gray-200 rounded-lg text-sm font-sans text-gray-700 bg-gray-50 outline-none select-none cursor-default"
-                  defaultValue="Senior Analyst"
+                  defaultValue={user?.role}
                   readOnly
-                />
-              </div>
-              <div className="flex flex-col gap-2">
-                <label className="text-sm font-semibold text-gray-600">
-                  Department
-                </label>
-                <input
-                  className="w-full px-4 py-2.5 border-[1.5px] border-gray-200 rounded-lg text-sm font-sans text-gray-700 bg-white outline-none transition-all focus:border-electric-blue focus:shadow-[0_0_0_3px_rgba(33,150,243,0.12)]"
-                  defaultValue="P2TL Division"
                 />
               </div>
             </div>
