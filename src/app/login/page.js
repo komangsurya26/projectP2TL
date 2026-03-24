@@ -25,12 +25,12 @@ export default function LoginPage() {
         body: JSON.stringify({ email, password }),
       });
 
-      const data = await res.json();
-
-      if (data.status === "error") {
-        toast.error(data.message);
+      if (!res.ok) {
+        toast.error("Login gagal");
         return;
       }
+      const data = await res.json();
+
       await login(data.user);
       router.push("/dashboard");
     } catch (err) {
