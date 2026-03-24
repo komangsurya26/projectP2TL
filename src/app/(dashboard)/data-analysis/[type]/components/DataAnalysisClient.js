@@ -38,7 +38,7 @@ export default function DataAnalysisPage() {
     const fetchCustomers = async () => {
       setLoading(true);
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/pelanggan?jenis_meter=${typeParam}&page=${page}&per_page=${perPage}&idpel=${search}&status=${resultFilter}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/api/pelanggan?jenis_meter=${typeParam}&page=${page}&per_page=${perPage}&idpel=${search}&status=${resultFilter}`,
       );
 
       const json = await response.json();

@@ -22,52 +22,66 @@ export default function CustomerDetail({ customer, onClose }) {
 
   if (!customer) return null;
 
-  const url = process.env.NEXT_PUBLIC_API_URL;
-
   const fetchPurchaseHistory = async () => {
-    const res = await fetch(`${url}/meters/${customer.id}/purchase-history`);
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/meters/${customer.id}/purchase-history`,
+    );
     const json = await res.json();
     setPurchaseHistory(json.data);
   };
 
   const monthlyUsagePrabayar = async () => {
-    const res = await fetch(`${url}/meters/${customer.id}/monthly-usage`);
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/meters/${customer.id}/monthly-usage`,
+    );
     const json = await res.json();
     setMonthlyUsage(json.data);
   };
 
   const tokenTrendPrabayar = async () => {
-    const res = await fetch(`${url}/meters/${customer.id}/token-trend`);
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/meters/${customer.id}/token-trend`,
+    );
     const json = await res.json();
     setTokenTrend(json.data);
   };
 
   const monthlyUsageAmi = async () => {
-    const res = await fetch(`${url}/meters/${customer.id}/ami-usage`);
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/meters/${customer.id}/ami-usage`,
+    );
     const json = await res.json();
     setMonthlyUsage(json.data);
   };
 
   const yearlyUsageAmi = async () => {
-    const res = await fetch(`${url}/meters/${customer.id}/ami-yearly-usage`);
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/meters/${customer.id}/ami-yearly-usage`,
+    );
     const json = await res.json();
     setYearlyUsage(json.data);
   };
 
   const voltageTrendAmi = async () => {
-    const res = await fetch(`${url}/meters/${customer.id}/voltage-trend`);
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/meters/${customer.id}/voltage-trend`,
+    );
     const json = await res.json();
     setVoltageTrend(json.data);
   };
 
   const powerFactorTrendAmi = async () => {
-    const res = await fetch(`${url}/meters/${customer.id}/power-factor-trend`);
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/meters/${customer.id}/power-factor-trend`,
+    );
     const json = await res.json();
     setPowerFactorTrend(json.data);
   };
 
   const measurementHistoryAmi = async () => {
-    const res = await fetch(`${url}/meters/${customer.id}/measurement-history`);
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/meters/${customer.id}/measurement-history`,
+    );
     const json = await res.json();
     setMeasurementHistory(json.data);
   };

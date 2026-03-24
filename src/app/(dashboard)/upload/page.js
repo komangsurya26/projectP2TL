@@ -20,7 +20,7 @@ export default function UploadPage() {
 
   const fetchUploadHistory = async () => {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/upload-history`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/upload-history`,
     );
     const json = await res.json();
     setUploadHistory(json.data);
@@ -54,7 +54,7 @@ export default function UploadPage() {
       return;
     }
     window.open(
-      `${process.env.NEXT_PUBLIC_API_URL}/template-${template}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/template-${template}`,
       "_blank",
     );
   };
@@ -85,7 +85,7 @@ export default function UploadPage() {
         formData.append("totalChunks", totalChunks);
 
         const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/upload-${template}`,
+          `${process.env.NEXT_PUBLIC_API_URL}/api/upload-${template}`,
           {
             method: "POST",
             body: formData,

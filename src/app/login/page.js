@@ -2,16 +2,42 @@
 import { useRouter } from "next/navigation";
 import { Zap, Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
+import toast from "react-hot-toast";
+import { useAuth } from "@/context/AuthContext";
 
 export default function LoginPage() {
   const router = useRouter();
+  const { login } = useAuth();
+  const [email, setEmail] = useState("admin@pln.co.id");
+  const [password, setPassword] = useState("password123");
+
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setTimeout(() => router.push("/dashboard"), 800);
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/login`, {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await res.json();
+
+      if (data.status === "error") {
+        toast.error(data.message);
+        return;
+      }
+      await login(data.user);
+      router.push("/dashboard");
+    } catch (err) {
+      toast.error("Login gagal");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -48,8 +74,9 @@ export default function LoginPage() {
               <input
                 id="email"
                 type="email"
-                placeholder="admin@pln.co.id"
-                defaultValue="admin@pln.co.id"
+                placeholder="Email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 className="w-full px-4 py-3 border-[1.5px] border-gray-200 rounded-lg text-sm font-sans text-gray-700 bg-white outline-none transition-all focus:border-electric-blue focus:shadow-[0_0_0_3px_rgba(33,150,243,0.12)] placeholder:text-gray-400"
               />
             </div>
@@ -65,8 +92,9 @@ export default function LoginPage() {
                 <input
                   id="password"
                   type={showPassword ? "text" : "password"}
-                  placeholder="Enter your password"
-                  defaultValue="password123"
+                  placeholder="Password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                   className="w-full px-4 py-3 pr-11 border-[1.5px] border-gray-200 rounded-lg text-sm font-sans text-gray-700 bg-white outline-none transition-all focus:border-electric-blue focus:shadow-[0_0_0_3px_rgba(33,150,243,0.12)] placeholder:text-gray-400"
                 />
                 <button

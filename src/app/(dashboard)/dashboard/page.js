@@ -1,4 +1,5 @@
 "use client";
+import { useEffect } from "react";
 import {
   Users,
   AlertTriangle,
@@ -13,6 +14,8 @@ import {
   riskDistribution,
   recentActivities,
 } from "@/data/mockData";
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/context/AuthContext";
 
 const cardColors = {
   blue: {
@@ -45,6 +48,15 @@ const dotColors = {
 };
 
 export default function DashboardPage() {
+  const { user } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (user === undefined) return;
+
+    if (!user) router.push("/login");
+  }, [user]);
+
   const summaryCards = [
     {
       label: "Jumlah Pelanggan",
@@ -86,6 +98,9 @@ export default function DashboardPage() {
         <h1 className="text-2xl font-bold text-dark-blue mb-1">
           Dashboard Overview
         </h1>
+        <p className="text-sm text-gray-500">
+          Hello {user?.name} | Unit: {user?.unit_nama} | Role: {user?.role}
+        </p>
         <p className="text-sm text-gray-500">
           Hasil monitoring inspeksi P2TL dan analisa energi
         </p>
