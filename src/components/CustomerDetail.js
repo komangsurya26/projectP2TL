@@ -113,24 +113,24 @@ export default function CustomerDetail({ customer, onClose }) {
     switch (customer.meterType) {
       case "ami":
         return [
-          { key: "usage", label: "Energy Usage" },
-          { key: "yearly", label: "Yearly Trend" },
-          { key: "voltage", label: "Voltage Trend" },
-          { key: "powerfactor", label: "Power Factor" },
-          { key: "measurements", label: "Measurement History" },
+          { key: "usage", label: "Penggunaan Energi" },
+          { key: "yearly", label: "Tren Tahunan" },
+          { key: "voltage", label: "Tren Tegangan" },
+          { key: "powerfactor", label: "Faktor Daya" },
+          { key: "measurements", label: "Riwayat Pengukuran" },
         ];
       case "prabayar":
         return [
-          { key: "usage", label: "Token Purchases" },
-          { key: "monthly", label: "Monthly Usage" },
-          { key: "token_history", label: "Purchase History" },
+          { key: "usage", label: "Pembelian Token" },
+          { key: "monthly", label: "Penggunaan Bulanan" },
+          { key: "token_history", label: "Riwayat Pembelian" },
         ];
       default:
         return [
-          { key: "usage", label: "Monthly Usage" },
-          { key: "yearly", label: "Yearly Trend" },
-          { key: "measurements", label: "Measurements" },
-          { key: "changes", label: "Data Changes" },
+          { key: "usage", label: "Penggunaan Bulanan" },
+          { key: "yearly", label: "Tren Tahunan" },
+          { key: "measurements", label: "Pengukuran" },
+          { key: "changes", label: "Perubahan Data" },
         ];
     }
   };
@@ -192,15 +192,15 @@ export default function CustomerDetail({ customer, onClose }) {
               </div>
               <div className="text-xs text-gray-500 mt-0.5">
                 {customer.meterType === "prabayar"
-                  ? "Purchase Freq"
-                  : "Power Capacity"}
+                  ? "Frekuensi Pembelian"
+                  : "Kapasitas Daya"}
               </div>
             </div>
             <div className="p-4 bg-gray-50 rounded-lg text-center flex flex-col justify-center">
               <div className={`text-2xl font-extrabold overflow-y-auto`}>
                 {customer.risk_score}
               </div>
-              <div className="text-xs text-gray-500 mt-0.5">Risk Score</div>
+              <div className="text-xs text-gray-500 mt-0.5">Skor Risiko</div>
             </div>
             <div className="p-4 bg-gray-50 rounded-lg text-center flex flex-col justify-center">
               <div
@@ -208,9 +208,7 @@ export default function CustomerDetail({ customer, onClose }) {
               >
                 {customer.result}
               </div>
-              <div className="text-xs text-gray-500 mt-0.5">
-                Inspection Result
-              </div>
+              <div className="text-xs text-gray-500 mt-0.5">Hasil Inspeksi</div>
             </div>
           </div>
 
@@ -219,12 +217,12 @@ export default function CustomerDetail({ customer, onClose }) {
             <div className="flex items-start gap-3 p-4 bg-danger/6 border border-danger/15 rounded-lg mb-6 text-sm text-danger">
               <AlertTriangle size={18} className="mt-0.5 shrink-0" />
               <span>
-                <strong>Anomaly Detected: </strong>
+                <strong>Anomali Terdeteksi: </strong>
                 {customer.meterType === "ami"
-                  ? "Voltage drop detected below threshold during off-peak hours."
+                  ? "Penurunan tegangan terdeteksi di bawah ambang batas selama jam di luar beban puncak."
                   : customer.meterType === "prabayar"
-                    ? "Token purchase frequency is drastically lower than historical averages."
-                    : "Significant usage drop detected. Possible meter tampering or bypass suspected."}
+                    ? "Frekuensi pembelian token drastis lebih rendah dari rata-rata historis."
+                    : "Penurunan penggunaan yang signifikan terdeteksi. Diduga ada pelanggaran meteran atau bypass."}
               </span>
             </div>
           )}
@@ -251,7 +249,7 @@ export default function CustomerDetail({ customer, onClose }) {
           {activeTab === "usage" && customer.meterType === "prabayar" && (
             <div>
               <h4 className="text-sm font-semibold text-dark-blue mb-4">
-                Token Purchase & Frequency Trend
+                Tren Pembelian Token & Frekuensi
               </h4>
               <TokenPurchaseTrendChart tokenTrend={tokenTrend} />
             </div>
@@ -260,7 +258,7 @@ export default function CustomerDetail({ customer, onClose }) {
           {activeTab === "usage" && customer.meterType !== "prabayar" && (
             <div>
               <h4 className="text-sm font-semibold text-dark-blue mb-4">
-                Monthly Energy Usage (kWh)
+                Penggunaan Energi Bulanan (kWh)
               </h4>
               <UsageTrendChart monthlyUsage={monthlyUsage} />
             </div>
@@ -269,7 +267,7 @@ export default function CustomerDetail({ customer, onClose }) {
           {activeTab === "monthly" && customer.meterType === "prabayar" && (
             <div>
               <h4 className="text-sm font-semibold text-dark-blue mb-4">
-                Monthly Energy Usage (kWh)
+                Penggunaan Energi Bulanan (kWh)
               </h4>
               <UsageTrendChart monthlyUsage={monthlyUsage} />
             </div>
@@ -278,7 +276,7 @@ export default function CustomerDetail({ customer, onClose }) {
           {activeTab === "yearly" && customer.meterType !== "prabayar" && (
             <div>
               <h4 className="text-sm font-semibold text-dark-blue mb-4">
-                Yearly Consumption Trend (kWh)
+                Tren Konsumsi Tahunan (kWh)
               </h4>
               <YearlyTrendChart yearlyUsage={yearlyUsage} />
             </div>
@@ -287,7 +285,7 @@ export default function CustomerDetail({ customer, onClose }) {
           {activeTab === "voltage" && (
             <div>
               <h4 className="text-sm font-semibold text-dark-blue mb-4">
-                Voltage Trend (V)
+                Tren Tegangan (V)
               </h4>
               <VoltageTrendChart voltageTrend={voltageTrend} />
             </div>
@@ -296,7 +294,7 @@ export default function CustomerDetail({ customer, onClose }) {
           {activeTab === "powerfactor" && (
             <div>
               <h4 className="text-sm font-semibold text-dark-blue mb-4">
-                Power Factor Trend
+                Tren Faktor Daya
               </h4>
               <PowerFactorTrendChart powerFactorTrend={powerFactorTrend} />
             </div>
@@ -307,7 +305,7 @@ export default function CustomerDetail({ customer, onClose }) {
               <table className="w-full border-collapse">
                 <thead>
                   <tr>
-                    {["Date", "kWh", "kVARh", "PF", "Voltage", "Current"].map(
+                    {["Tanggal", "kWh", "kVARh", "PF", "Tegangan", "Arus"].map(
                       (h) => (
                         <th
                           key={h}
@@ -352,7 +350,7 @@ export default function CustomerDetail({ customer, onClose }) {
               <table className="w-full border-collapse">
                 <thead>
                   <tr>
-                    {["Date", "Amount", "Energy", "Token Code"].map((h) => (
+                    {["Tanggal", "Jumlah", "Energi", "Kode Token"].map((h) => (
                       <th
                         key={h}
                         className="px-4 py-3 text-left text-xs font-bold uppercase tracking-wider text-gray-500 bg-gray-50 border-b-2 border-gray-200"
@@ -390,11 +388,11 @@ export default function CustomerDetail({ customer, onClose }) {
                 <thead>
                   <tr>
                     {[
-                      "Billing Month",
-                      "Usage",
-                      "Amount",
+                      "Bulan Tagihan",
+                      "Penggunaan",
+                      "Jumlah",
                       "Status",
-                      "Due Date",
+                      "Batas Waktu",
                     ].map((h) => (
                       <th
                         key={h}
@@ -440,11 +438,11 @@ export default function CustomerDetail({ customer, onClose }) {
                 <thead>
                   <tr>
                     {[
-                      "Date",
+                      "Tanggal",
                       "Field",
-                      "Old Value",
-                      "New Value",
-                      "Changed By",
+                      "Nilai Lama",
+                      "Nilai Baru",
+                      "Diubah Oleh",
                     ].map((h) => (
                       <th
                         key={h}

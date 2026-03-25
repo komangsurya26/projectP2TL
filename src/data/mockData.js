@@ -18,14 +18,14 @@ export const months = [
   "Feb",
   "Mar",
   "Apr",
-  "May",
+  "Mei",
   "Jun",
   "Jul",
-  "Aug",
+  "Agu",
   "Sep",
-  "Oct",
+  "Okt",
   "Nov",
-  "Dec",
+  "Des",
 ];
 export const years = [2022, 2023, 2024, 2025, 2026];
 
@@ -64,38 +64,38 @@ export const uploadHistory = [
 
 export const recentActivities = [
   {
-    text: "New anomaly detected for customer PLN-002 (Siti Rahayu)",
-    time: "2 hours ago",
+    text: "Anomali baru terdeteksi untuk pelanggan PLN-002 (Siti Rahayu)",
+    time: "2 jam lalu",
     color: "red",
   },
   {
-    text: "Inspection completed for PLN-009 (Ketut Arini) — Normal",
-    time: "4 hours ago",
+    text: "Inspeksi selesai untuk PLN-009 (Ketut Arini) — Normal",
+    time: "4 jam lalu",
     color: "green",
   },
   {
-    text: "Data upload completed: P2TL_Data_Feb2026.xlsx",
-    time: "6 hours ago",
+    text: "Unggah data selesai: P2TL_Data_Feb2026.xlsx",
+    time: "6 jam lalu",
     color: "blue",
   },
   {
-    text: "Risk level updated for PLN-013 (Putu Mega) — Medium",
-    time: "8 hours ago",
+    text: "Tingkat risiko diperbarui untuk PLN-013 (Putu Mega) — Sedang",
+    time: "8 jam lalu",
     color: "orange",
   },
   {
-    text: "Monthly report generated for January 2026",
-    time: "1 day ago",
+    text: "Laporan bulanan dibuat untuk Januari 2026",
+    time: "1 hari lalu",
     color: "blue",
   },
   {
-    text: "New anomaly detected for customer PLN-015 (Kadek Ratna)",
-    time: "1 day ago",
+    text: "Anomali baru terdeteksi untuk pelanggan PLN-015 (Kadek Ratna)",
+    time: "1 hari lalu",
     color: "red",
   },
   {
-    text: "Inspection completed for PLN-005 (Made Surya) — Normal",
-    time: "2 days ago",
+    text: "Inspeksi selesai untuk PLN-005 (Made Surya) — Normal",
+    time: "2 hari lalu",
     color: "green",
   },
 ];
@@ -146,24 +146,24 @@ export const measurementHistory = [
 export const dataChangeHistory = [
   {
     date: "2026-02-10",
-    field: "Tariff",
+    field: "Tarif",
     oldValue: "R-1/900",
     newValue: "R-1/TR",
-    changedBy: "System",
+    changedBy: "Sistem",
   },
   {
     date: "2025-12-01",
-    field: "Power Capacity",
+    field: "Kapasitas Daya",
     oldValue: "1300 VA",
     newValue: "2200 VA",
     changedBy: "Admin",
   },
   {
     date: "2025-09-15",
-    field: "Address",
+    field: "Alamat",
     oldValue: "Jl. Merdeka No. 40",
     newValue: "Jl. Merdeka No. 45",
-    changedBy: "Customer",
+    changedBy: "Pelanggan",
   },
 ];
 
@@ -205,35 +205,35 @@ export const billingUsageHistory = [
     month: "Feb 2026",
     usage: "320 kWh",
     bill: "Rp 450.000",
-    status: "Unpaid",
+    status: "Belum Dibayar",
     dueDate: "2026-03-20",
   },
   {
     month: "Jan 2026",
     usage: "310 kWh",
     bill: "Rp 440.000",
-    status: "Paid",
+    status: "Sudah Dibayar",
     dueDate: "2026-02-20",
   },
   {
-    month: "Dec 2025",
+    month: "Des 2025",
     usage: "340 kWh",
     bill: "Rp 480.000",
-    status: "Paid",
+    status: "Sudah Dibayar",
     dueDate: "2026-01-20",
   },
   {
     month: "Nov 2025",
     usage: "325 kWh",
     bill: "Rp 460.000",
-    status: "Paid",
+    status: "Sudah Dibayar",
     dueDate: "2025-12-20",
   },
   {
-    month: "Oct 2025",
+    month: "Okt 2025",
     usage: "350 kWh",
     bill: "Rp 495.000",
-    status: "Paid",
+    status: "Sudah Dibayar",
     dueDate: "2025-11-20",
   },
 ];
@@ -249,7 +249,7 @@ export const dashboardTrendData = months.map((m, i) => ({
 }));
 
 export const riskDistribution = [
-  { category: "Low", count: 12, color: "#10B981" },
-  { category: "Medium", count: 4, color: "#F59E0B" },
-  { category: "High", count: 4, color: "#EF4444" },
+  { category: "Rendah", count: 12, color: "#10B981" },
+  { category: "Sedang", count: 4, color: "#F59E0B" },
+  { category: "Tinggi", count: 4, color: "#EF4444" },
 ];

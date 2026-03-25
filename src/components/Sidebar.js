@@ -13,9 +13,9 @@ import {
 
 const navItems = [
   { label: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
-  { label: "Upload Data", href: "/upload", icon: Upload },
+  { label: "Unggah Data", href: "/upload", icon: Upload },
   {
-    label: "Data Analysis",
+    label: "Analisis Data",
     href: "/data-analysis",
     icon: BarChart3,
     subItems: [
@@ -23,8 +23,8 @@ const navItems = [
       { label: "Prabayar", href: "/data-analysis/prabayar" },
     ],
   },
-  { label: "Download Report", href: "/download", icon: Download },
-  { label: "Settings", href: "/settings", icon: Settings },
+  { label: "Unduh Laporan", href: "/download", icon: Download },
+  { label: "Pengaturan", href: "/settings", icon: Settings },
 ];
 
 export default function Sidebar({ isOpen, onClose }) {

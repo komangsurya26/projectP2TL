@@ -63,19 +63,19 @@ export default function DataAnalysisPage() {
     switch (typeParam?.toLowerCase()) {
       case "ami":
         return [
-          { key: "id", label: "Customer ID" },
-          { key: "name", label: "Customer Name" },
-          { key: "meterNumber", label: "Meter Number" },
-          { key: "risk", label: "Risk Score" },
+          { key: "id", label: "ID Pelanggan" },
+          { key: "name", label: "Nama Pelanggan" },
+          { key: "meterNumber", label: "Nomor Meter" },
+          { key: "risk", label: "Skor Risiko" },
           { key: "result", label: "Status" },
         ];
 
       case "prabayar":
         return [
-          { key: "id", label: "Customer ID" },
-          { key: "name", label: "Customer Name" },
-          { key: "meterNumber", label: "Meter Number" },
-          { key: "risk", label: "Risk Score" },
+          { key: "id", label: "ID Pelanggan" },
+          { key: "name", label: "Nama Pelanggan" },
+          { key: "meterNumber", label: "Nomor Meter" },
+          { key: "risk", label: "Skor Risiko" },
           { key: "result", label: "Status" },
         ];
       default:
@@ -88,7 +88,7 @@ export default function DataAnalysisPage() {
   if (!isValidType) {
     return (
       <div className="p-8 text-center text-gray-500">
-        Invalid meter type selected.
+        Jenis meter tidak valid.
       </div>
     );
   }
@@ -98,11 +98,11 @@ export default function DataAnalysisPage() {
       <div className="mb-8 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold text-dark-blue mb-1">
-            Data Analysis: {displayType}
+            Analisis Data: {displayType}
           </h1>
           <p className="text-sm text-gray-500">
-            Analyze P2TL inspection data and customer risk indicators for{" "}
-            {displayType} meters.
+            Analisis data inspeksi P2TL dan indikator risiko pelanggan untuk
+            meteran {displayType}.
           </p>
         </div>
 
@@ -110,7 +110,7 @@ export default function DataAnalysisPage() {
           variant="primary"
           className="w-fit text-sm px-3 py-1 bg-electric-blue/10 text-electric-blue border-electric-blue/20"
         >
-          Total: {meta.total?.toLocaleString() || 0} Customers
+          Total: {meta.total?.toLocaleString() || 0} Pelanggan
         </Badge>
       </div>
 
@@ -119,7 +119,7 @@ export default function DataAnalysisPage() {
           <Search size={18} className="text-gray-400 min-w-[18px]" />
           <input
             type="text"
-            placeholder="Search by ID or Meter Number..."
+            placeholder="Cari berdasarkan ID atau Nomor Meter..."
             value={search}
             onChange={(e) => {
               setSearch(e.target.value);
@@ -138,11 +138,11 @@ export default function DataAnalysisPage() {
               setPage(1);
             }}
           >
-            <option value="">All Results</option>
+            <option value="">Semua Hasil</option>
             <option value="NORMAL">Normal</option>
-            <option value="SUSPECT">Suspect</option>
-            <option value="ANOMALY">Anomaly</option>
-            <option value="LOW_CONSUMPTION">Low</option>
+            <option value="SUSPECT">Suspek</option>
+            <option value="ANOMALY">Anomali</option>
+            <option value="LOW_CONSUMPTION">Rendah</option>
           </select>
           <select
             className="px-3 py-2 border-[1.5px] border-gray-200 rounded-lg text-sm font-sans text-gray-600 bg-white cursor-pointer outline-none focus:border-electric-blue min-w-[100px]"
@@ -152,9 +152,9 @@ export default function DataAnalysisPage() {
               setPage(1);
             }}
           >
-            <option value={10}>10 rows</option>
-            <option value={25}>25 rows</option>
-            <option value={50}>50 rows</option>
+            <option value={10}>10 baris</option>
+            <option value={25}>25 baris</option>
+            <option value={50}>50 baris</option>
           </select>
         </div>
       </div>
@@ -248,7 +248,7 @@ export default function DataAnalysisPage() {
                     colSpan={7}
                     className="px-4 py-8 text-center text-sm text-gray-500 border-b border-gray-100"
                   >
-                    No customers found matching the criteria.
+                    Tidak ada pelanggan yang cocok dengan kriteria.
                   </td>
                 </tr>
               )}
@@ -259,7 +259,7 @@ export default function DataAnalysisPage() {
         {/* PAGINATION UI TIDAK DIUBAH */}
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 p-4 border-t border-gray-100 bg-white">
           <div className="text-sm text-gray-500">
-            Total {meta.total?.toLocaleString() || 0} results
+            Total {meta.total?.toLocaleString() || 0} hasil
           </div>
 
           <div className="flex items-center gap-1">

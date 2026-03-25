@@ -56,7 +56,7 @@ export function EnergyLineChart({ data }) {
           fillOpacity={1}
           fill="url(#colorConsumption)"
           strokeWidth={2.5}
-          name="Consumption (kWh)"
+          name="Konsumsi (kWh)"
         />
         <Line
           type="monotone"
@@ -87,7 +87,7 @@ export function RiskBarChart({ data }) {
           axisLine={{ stroke: "#E2E8F0" }}
         />
         <Tooltip contentStyle={tooltipStyle} />
-        <Bar dataKey="count" radius={[6, 6, 0, 0]} name="Customers">
+        <Bar dataKey="count" radius={[6, 6, 0, 0]} name="Pelanggan">
           {data.map((entry, index) => (
             <Cell key={index} fill={entry.color} />
           ))}
@@ -129,7 +129,7 @@ export function UsageTrendChart({ monthlyUsage }) {
           fillOpacity={1}
           fill="url(#colorUsage)"
           strokeWidth={2}
-          name="Usage (kWh)"
+          name="Penggunaan (kWh)"
         />
       </AreaChart>
     </ResponsiveContainer>
@@ -166,7 +166,7 @@ export function YearlyTrendChart({ yearlyUsage }) {
           strokeWidth={3}
           dot={{ r: 4, fill: "#2196F3" }}
           activeDot={{ r: 6, fill: "#00E5FF", stroke: "#fff", strokeWidth: 2 }}
-          name="Yearly Usage (kWh)"
+          name="Penggunaan Tahunan (kWh)"
         />
       </LineChart>
     </ResponsiveContainer>
@@ -204,7 +204,7 @@ export function VoltageTrendChart({ voltageTrend }) {
           stroke="#F59E0B"
           strokeWidth={2}
           dot={{ r: 3, fill: "#F59E0B" }}
-          name="Voltage (V)"
+          name="Tegangan (V)"
         />
       </LineChart>
     </ResponsiveContainer>
@@ -242,7 +242,7 @@ export function PowerFactorTrendChart({ powerFactorTrend }) {
           stroke="#8B5CF6"
           strokeWidth={2}
           dot={{ r: 3, fill: "#8B5CF6" }}
-          name="Power Factor"
+          name="Faktor Daya"
         />
       </LineChart>
     </ResponsiveContainer>
@@ -284,7 +284,7 @@ export function TokenPurchaseTrendChart({ tokenTrend }) {
           dataKey="energy"
           fill="#10B981"
           radius={[4, 4, 0, 0]}
-          name="Token Energy (kWh)"
+          name="Energi Token (kWh)"
         />
         <Line
           yAxisId="right"
@@ -293,7 +293,7 @@ export function TokenPurchaseTrendChart({ tokenTrend }) {
           stroke="#3B82F6"
           strokeWidth={2}
           dot={{ r: 4, fill: "#3B82F6" }}
-          name="Purchase Freq"
+          name="Frekuensi Pembelian"
         />
       </BarChart>
     </ResponsiveContainer>

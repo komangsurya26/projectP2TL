@@ -9,9 +9,9 @@ export default function SettingsPage() {
   return (
     <>
       <div className="mb-8">
-        <h1 className="text-2xl font-bold text-dark-blue mb-1">Settings</h1>
+        <h1 className="text-2xl font-bold text-dark-blue mb-1">Pengaturan</h1>
         <p className="text-sm text-gray-500">
-          Manage your account and application preferences
+          Kelola akun dan preferensi aplikasi Anda
         </p>
       </div>
 
@@ -22,7 +22,7 @@ export default function SettingsPage() {
             <CardTitle>
               <div className="flex items-center gap-2">
                 <User size={18} />
-                Profile Settings
+                Pengaturan Profil
               </div>
             </CardTitle>
           </CardHeader>
@@ -30,7 +30,7 @@ export default function SettingsPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5 max-w-3xl">
               <div className="flex flex-col gap-2">
                 <label className="text-sm font-semibold text-gray-600">
-                  Full Name
+                  Nama Lengkap
                 </label>
                 <input
                   className="w-full px-4 py-2.5 border-[1.5px] border-gray-200 rounded-lg text-sm font-sans text-gray-700 bg-white outline-none transition-all focus:border-electric-blue focus:shadow-[0_0_0_3px_rgba(33,150,243,0.12)]"
@@ -48,7 +48,7 @@ export default function SettingsPage() {
               </div>
               <div className="flex flex-col gap-2">
                 <label className="text-sm font-semibold text-gray-600">
-                  Role
+                  Peran
                 </label>
                 <input
                   className="w-full px-4 py-2.5 border-[1.5px] border-gray-200 rounded-lg text-sm font-sans text-gray-700 bg-gray-50 outline-none select-none cursor-default"
@@ -57,7 +57,7 @@ export default function SettingsPage() {
                 />
               </div>
             </div>
-            <Button className="mt-6">Save Changes</Button>
+            <Button className="mt-6">Simpan Perubahan</Button>
           </CardContent>
         </Card>
 
@@ -67,17 +67,17 @@ export default function SettingsPage() {
             <CardTitle>
               <div className="flex items-center gap-2">
                 <Bell size={18} />
-                Notification Preferences
+                Preferensi Notifikasi
               </div>
             </CardTitle>
           </CardHeader>
           <CardContent className="p-0 sm:p-0">
             <div className="flex flex-col">
               {[
-                "Anomaly Detection Alerts",
-                "Inspection Report Ready",
-                "Weekly Summary Email",
-                "System Maintenance Notices",
+                "Peringatan Deteksi Anomali",
+                "Laporan Inspeksi Siap",
+                "Email Ringkasan Mingguan",
+                "Pemberitahuan Pemeliharaan Sistem",
               ].map((label, i) => (
                 <label
                   key={i}
@@ -103,23 +103,25 @@ export default function SettingsPage() {
             <CardTitle>
               <div className="flex items-center gap-2">
                 <Database size={18} />
-                System Information
+                Informasi Sistem
               </div>
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-[auto_1fr] gap-x-8 gap-y-4 text-sm max-w-md">
-              <span className="text-gray-500 font-semibold">Version</span>
+              <span className="text-gray-500 font-semibold">Versi</span>
               <span className="text-gray-800">P2TL Analytics v1.0.0</span>
 
-              <span className="text-gray-500 font-semibold">Last Updated</span>
-              <span className="text-gray-800">March 2026</span>
+              <span className="text-gray-500 font-semibold">
+                Terakhir Diperbarui
+              </span>
+              <span className="text-gray-800">Maret 2026</span>
 
-              <span className="text-gray-500 font-semibold">Database</span>
+              <span className="text-gray-500 font-semibold">Basis Data</span>
               <span className="text-gray-800">PostgreSQL 16.2</span>
 
-              <span className="text-gray-500 font-semibold">Environment</span>
-              <span className="text-success font-semibold">Production</span>
+              <span className="text-gray-500 font-semibold">Lingkungan</span>
+              <span className="text-success font-semibold">Produksi</span>
             </div>
           </CardContent>
         </Card>

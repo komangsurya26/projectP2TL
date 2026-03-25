@@ -5,7 +5,7 @@ import { AuthProvider } from "@/context/AuthContext";
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html lang="id">
       <body className="antialiased">
         <AuthProvider>
           <Toaster

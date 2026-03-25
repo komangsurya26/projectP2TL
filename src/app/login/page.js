@@ -65,10 +65,10 @@ export default function LoginPage() {
           {/* Form */}
           <form onSubmit={handleSubmit}>
             <h2 className="text-2xl font-bold text-dark-blue mb-2">
-              Welcome back
+              Selamat datang kembali
             </h2>
             <p className="text-gray-500 mb-8 text-sm">
-              Sign in to access the P2TL analysis dashboard
+              Masuk untuk mengakses dasbor analisis P2TL
             </p>
 
             <div className="mb-5">
@@ -76,7 +76,7 @@ export default function LoginPage() {
                 htmlFor="email"
                 className="block text-sm font-semibold text-gray-600 mb-2"
               >
-                Email Address
+                Alamat Email
               </label>
               <input
                 id="email"
@@ -93,13 +93,13 @@ export default function LoginPage() {
                 htmlFor="password"
                 className="block text-sm font-semibold text-gray-600 mb-2"
               >
-                Password
+                Kata Sandi
               </label>
               <div className="relative">
                 <input
                   id="password"
                   type={showPassword ? "text" : "password"}
-                  placeholder="Password"
+                  placeholder="Kata Sandi"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   className="w-full px-4 py-3 pr-11 border-[1.5px] border-gray-200 rounded-lg text-sm font-sans text-gray-700 bg-white outline-none transition-all focus:border-electric-blue focus:shadow-[0_0_0_3px_rgba(33,150,243,0.12)] placeholder:text-gray-400"
@@ -121,13 +121,13 @@ export default function LoginPage() {
                   defaultChecked
                   className="w-4 h-4 accent-electric-blue cursor-pointer"
                 />{" "}
-                Remember me
+                Ingat saya
               </label>
               <a
                 href="#"
                 className="text-sm text-electric-blue font-medium no-underline hover:underline"
               >
-                Forgot password?
+                Lupa kata sandi?
               </a>
             </div>
 
@@ -136,7 +136,7 @@ export default function LoginPage() {
               disabled={loading}
               className="w-full py-3.5 bg-linear-to-br from-electric-blue to-[#1976D2] text-white border-none rounded-lg text-base font-semibold font-sans cursor-pointer transition-all hover:-translate-y-px hover:shadow-[0_8px_25px_rgba(33,150,243,0.35)] disabled:opacity-60"
             >
-              {loading ? "Signing in..." : "Sign In"}
+              {loading ? "Sedang masuk..." : "Masuk"}
             </button>
           </form>
         </div>
@@ -147,7 +147,7 @@ export default function LoginPage() {
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(33,150,243,0.15),transparent_60%),radial-gradient(circle_at_70%_80%,rgba(0,229,255,0.1),transparent_50%)]"></div>
         <img
           src="/login-illustration.png"
-          alt="Power grid analytics illustration"
+          alt="Ilustrasi analisis jaringan listrik"
           className="w-[80%] max-w-[500px] relative z-10 rounded-2xl drop-shadow-[0_20px_40px_rgba(0,0,0,0.3)]"
         />
       </div>

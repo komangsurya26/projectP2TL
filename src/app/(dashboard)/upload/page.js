@@ -111,9 +111,9 @@ export default function UploadPage() {
   return (
     <>
       <div className="mb-8">
-        <h1 className="text-2xl font-bold text-dark-blue mb-1">Upload Data</h1>
+        <h1 className="text-2xl font-bold text-dark-blue mb-1">Unggah Data</h1>
         <p className="text-sm text-gray-500">
-          Upload CSV files for P2TL inspection data analysis
+          Unggah file CSV untuk analisis data inspeksi P2TL
         </p>
       </div>
 
@@ -135,17 +135,17 @@ export default function UploadPage() {
               <Upload size={32} />
             </div>
             <h3 className="text-lg font-semibold text-dark-blue mb-2">
-              Drag & drop your CSV file here
+              Tarik & lepas file CSV Anda di sini
             </h3>
             <p className="text-sm text-gray-500">
-              or{" "}
+              atau{" "}
               <span className="text-electric-blue font-semibold cursor-pointer">
-                browse files
+                cari file
               </span>{" "}
-              from your computer
+              dari komputer Anda
             </p>
             <p className="mt-2 text-xs text-gray-400">
-              Supports .csv (max 500MB)
+              Mendukung .csv (maks 500MB)
             </p>
             <input
               ref={fileRef}
@@ -176,10 +176,10 @@ export default function UploadPage() {
                 </span>
                 <div className="text-xs mt-1">
                   {uploadStatus === "success"
-                    ? "File validated successfully. Ready to process."
+                    ? "File berhasil divalidasi. Siap untuk diproses."
                     : uploadStatus === "processing"
-                      ? "File is being processed"
-                      : "Invalid file format. Please upload a CSV file."}
+                      ? "File sedang diproses"
+                      : "Format file tidak valid. Harap unggah file CSV."}
                 </div>
               </div>
             </div>
@@ -194,8 +194,8 @@ export default function UploadPage() {
             >
               <Upload size={16} />
               {uploadStatus === "processing"
-                ? "Processing..."
-                : "Upload & Process"}
+                ? "Sedang memproses..."
+                : "Unggah & Proses"}
             </button>
             <div>
               <select
@@ -212,7 +212,7 @@ export default function UploadPage() {
               onClick={handleDownloadTemplate}
               className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-semibold font-sans cursor-pointer transition-all bg-white text-gray-700 border-[1.5px] border-gray-200 hover:border-gray-300 hover:bg-gray-50"
             >
-              <Download size={16} /> Download Template
+              <Download size={16} /> Unduh Template
             </button>
           </div>
         </div>
@@ -222,7 +222,7 @@ export default function UploadPage() {
       <div className="bg-white rounded-xl border border-gray-200 shadow-sm">
         <div className="px-6 py-5 border-b border-gray-100 flex items-center justify-between">
           <h3 className="text-base font-semibold text-dark-blue">
-            Upload History
+            Riwayat Unggahan
           </h3>
         </div>
         <div className="overflow-x-auto">
@@ -230,16 +230,16 @@ export default function UploadPage() {
             <thead>
               <tr>
                 <th className="px-4 py-3 text-left text-xs font-bold uppercase tracking-wider text-gray-500 bg-gray-50 border-b-2 border-gray-200">
-                  File Name
+                  Nama File
                 </th>
                 <th className="px-4 py-3 text-left text-xs font-bold uppercase tracking-wider text-gray-500 bg-gray-50 border-b-2 border-gray-200">
-                  Upload Date
+                  Tanggal Unggah
                 </th>
                 <th className="px-4 py-3 text-left text-xs font-bold uppercase tracking-wider text-gray-500 bg-gray-50 border-b-2 border-gray-200">
                   Status
                 </th>
                 <th className="px-4 py-3 text-left text-xs font-bold uppercase tracking-wider text-gray-500 bg-gray-50 border-b-2 border-gray-200">
-                  Rows Processed
+                  Baris Diproses
                 </th>
               </tr>
             </thead>
@@ -261,10 +261,10 @@ export default function UploadPage() {
                       ${item.status === "success" ? "bg-success/10 text-success" : item.status === "error" ? "bg-danger/10 text-danger" : "bg-warning/10 text-warning"}`}
                     >
                       {item.status === "success"
-                        ? "✓ Success"
+                        ? "✓ Berhasil"
                         : item.status === "error"
-                          ? "✕ Failed"
-                          : "⟳ Processing"}
+                          ? "✕ Gagal"
+                          : "⟳ Sedang memproses"}
                     </span>
                   </td>
                   <td className="px-4 py-3 text-sm text-gray-700 border-b border-gray-100">

@@ -84,7 +84,7 @@ export default function DashboardPage() {
     <>
       <div className="mb-8">
         <h1 className="text-2xl font-bold text-dark-blue mb-1">
-          Dashboard Overview
+          Ringkasan Dashboard
         </h1>
         <p className="text-sm text-gray-500">
           Hasil monitoring inspeksi P2TL dan analisa energi
@@ -120,7 +120,7 @@ export default function DashboardPage() {
                 ) : (
                   <TrendingDown size={14} />
                 )}
-                {card.trend} from last month
+                {card.trend} dari bulan lalu
               </div>
             </div>
           );
@@ -132,7 +132,7 @@ export default function DashboardPage() {
         <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
           <div className="px-6 py-5 border-b border-gray-100 flex items-center justify-between">
             <h3 className="text-base font-semibold text-dark-blue">
-              Monthly Energy Consumption Trend
+              Tren Konsumsi Energi Bulanan
             </h3>
             <span className="text-xs text-gray-400">2026</span>
           </div>
@@ -143,9 +143,9 @@ export default function DashboardPage() {
         <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
           <div className="px-6 py-5 border-b border-gray-100 flex items-center justify-between">
             <h3 className="text-base font-semibold text-dark-blue">
-              Risk Distribution
+              Distribusi Risiko
             </h3>
-            <span className="text-xs text-gray-400">20 customers</span>
+            <span className="text-xs text-gray-400">20 pelanggan</span>
           </div>
           <div className="p-6">
             <RiskBarChart data={riskDistribution} />
@@ -157,13 +157,13 @@ export default function DashboardPage() {
       <div className="bg-white rounded-xl border border-gray-200 shadow-sm">
         <div className="px-6 py-5 border-b border-gray-100 flex items-center justify-between">
           <h3 className="text-base font-semibold text-dark-blue">
-            Recent Activity
+            Aktivitas Terbaru
           </h3>
           <a
             href="#"
             className="text-sm font-semibold text-electric-blue no-underline hover:underline"
           >
-            View All
+            Lihat Semua
           </a>
         </div>
         <div className="flex flex-col">

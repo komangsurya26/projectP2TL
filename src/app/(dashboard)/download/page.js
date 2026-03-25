@@ -38,36 +38,36 @@ const downloadHistory = [
 ];
 
 const months = [
-  "January",
-  "February",
-  "March",
+  "Januari",
+  "Februari",
+  "Maret",
   "April",
-  "May",
-  "June",
-  "July",
-  "August",
+  "Mei",
+  "Juni",
+  "Juli",
+  "Agustus",
   "September",
-  "October",
+  "Oktober",
   "November",
-  "December",
+  "Desember",
 ];
 const years = [2026, 2025, 2024, 2023];
 const reportTypes = [
-  "Monthly Report",
-  "Anomaly Report",
-  "Risk Report",
-  "Annual Report",
-  "Customer Summary",
+  "Laporan Bulanan",
+  "Laporan Anomali",
+  "Laporan Risiko",
+  "Laporan Tahunan",
+  "Ringkasan Pelanggan",
 ];
 
 export default function DownloadPage() {
-  const [month, setMonth] = useState("February");
+  const [month, setMonth] = useState("Februari");
   const [year, setYear] = useState(2026);
-  const [type, setType] = useState("Monthly Report");
+  const [type, setType] = useState("Laporan Bulanan");
 
   const handleDownload = () => {
     alert(
-      `Downloading ${type} for ${month} ${year}...\n\n(Demo: In production, this would generate and download an XLSX file)`,
+      `Mengunduh ${type} untuk ${month} ${year}...\n\n(Demo: Di environment produksi, ini akan membuat dan mengunduh file XLSX)`,
     );
   };
 
@@ -75,22 +75,22 @@ export default function DownloadPage() {
     <>
       <div className="mb-8">
         <h1 className="text-2xl font-bold text-dark-blue mb-1">
-          Download Reports
+          Unduh Laporan
         </h1>
         <p className="text-sm text-gray-500">
-          Download processed analysis results and inspection reports
+          Unduh hasil analisis proses dan laporan inspeksi
         </p>
       </div>
 
       <Card className="mb-8">
         <CardHeader>
-          <CardTitle>Generate Report</CardTitle>
+          <CardTitle>Buat Laporan</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="flex flex-col md:flex-row md:items-end gap-5 flex-wrap">
             <div className="flex flex-col gap-2 w-full md:w-auto">
               <label className="text-[13px] font-semibold text-gray-600">
-                Report Type
+                Jenis Laporan
               </label>
               <select
                 className="px-3 py-2 border-[1.5px] border-gray-200 rounded-lg text-sm font-sans text-gray-600 bg-white cursor-pointer outline-none focus:border-electric-blue w-full md:w-48"
@@ -108,7 +108,7 @@ export default function DownloadPage() {
             <div className="flex gap-5 w-full md:w-auto">
               <div className="flex flex-col gap-2 flex-1 md:flex-none">
                 <label className="text-[13px] font-semibold text-gray-600">
-                  Month
+                  Bulan
                 </label>
                 <select
                   className="px-3 py-2 border-[1.5px] border-gray-200 rounded-lg text-sm font-sans text-gray-600 bg-white cursor-pointer outline-none focus:border-electric-blue w-full md:w-32"
@@ -124,7 +124,7 @@ export default function DownloadPage() {
               </div>
               <div className="flex flex-col gap-2 flex-1 md:flex-none">
                 <label className="text-[13px] font-semibold text-gray-600">
-                  Year
+                  Tahun
                 </label>
                 <select
                   className="px-3 py-2 border-[1.5px] border-gray-200 rounded-lg text-sm font-sans text-gray-600 bg-white cursor-pointer outline-none focus:border-electric-blue w-full md:w-28"
@@ -144,7 +144,7 @@ export default function DownloadPage() {
               onClick={handleDownload}
               className="w-full md:w-auto mt-2 md:mt-0"
             >
-              <Download size={16} /> Download Report
+              <Download size={16} /> Unduh Laporan
             </Button>
           </div>
         </CardContent>
@@ -152,26 +152,26 @@ export default function DownloadPage() {
 
       <Card>
         <CardHeader>
-          <CardTitle>Recent Downloads</CardTitle>
+          <CardTitle>Unduhan Terbaru</CardTitle>
         </CardHeader>
         <div className="overflow-x-auto w-full">
           <table className="w-full min-w-[600px] border-collapse">
             <thead>
               <tr>
                 <th className="px-4 py-3.5 text-left text-xs font-bold uppercase tracking-wider text-gray-500 bg-gray-50 border-b-2 border-gray-200">
-                  File Name
+                  Nama File
                 </th>
                 <th className="px-4 py-3.5 text-left text-xs font-bold uppercase tracking-wider text-gray-500 bg-gray-50 border-b-2 border-gray-200">
-                  Type
+                  Jenis
                 </th>
                 <th className="px-4 py-3.5 text-left text-xs font-bold uppercase tracking-wider text-gray-500 bg-gray-50 border-b-2 border-gray-200">
-                  Date
+                  Tanggal
                 </th>
                 <th className="px-4 py-3.5 text-left text-xs font-bold uppercase tracking-wider text-gray-500 bg-gray-50 border-b-2 border-gray-200">
-                  Size
+                  Ukuran
                 </th>
                 <th className="px-4 py-3.5 text-left text-xs font-bold uppercase tracking-wider text-gray-500 bg-gray-50 border-b-2 border-gray-200">
-                  Action
+                  Aksi
                 </th>
               </tr>
             </thead>
@@ -198,7 +198,7 @@ export default function DownloadPage() {
                   </td>
                   <td className="px-4 py-3 text-sm border-b border-gray-100">
                     <Button variant="secondary" size="sm">
-                      <Download size={14} /> Download
+                      <Download size={14} /> Unduh
                     </Button>
                   </td>
                 </tr>

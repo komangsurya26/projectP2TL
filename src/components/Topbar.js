@@ -78,7 +78,7 @@ export default function Topbar({ user, onMenuClick, onLogout }) {
                 }}
                 className="flex items-center gap-2 w-full px-4 py-2 hover:bg-gray-100"
               >
-                <User size={16} /> Profile
+                <User size={16} /> Profil
               </button>
               <button
                 onClick={() => {
@@ -87,7 +87,7 @@ export default function Topbar({ user, onMenuClick, onLogout }) {
                 }}
                 className="flex items-center gap-2 w-full px-4 py-2 hover:bg-gray-100"
               >
-                <Settings size={16} /> Settings
+                <Settings size={16} /> Pengaturan
               </button>
               <button
                 onClick={() => {
@@ -96,14 +96,14 @@ export default function Topbar({ user, onMenuClick, onLogout }) {
                 }}
                 className="flex items-center gap-2 w-full px-4 py-2 hover:bg-gray-100"
               >
-                <HelpCircle size={16} /> Help
+                <HelpCircle size={16} /> Bantuan
               </button>
               <hr className="my-1 border-gray-200" />
               <button
                 onClick={onLogout}
                 className="flex items-center gap-2 w-full px-4 py-2 hover:bg-gray-100 text-red-500"
               >
-                <LogOut size={16} /> Logout
+                <LogOut size={16} /> Keluar
               </button>
             </div>
           )}
