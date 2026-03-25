@@ -19,8 +19,8 @@ export default function DashboardLayout({ children }) {
   if (user === undefined) return null;
   if (!user) return null;
 
-  const handleLogout = () => {
-    logout();
+  const handleLogout = async () => {
+    await logout();
     router.push("/login");
   };
 
