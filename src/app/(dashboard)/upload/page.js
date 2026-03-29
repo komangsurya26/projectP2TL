@@ -88,6 +88,7 @@ export default function UploadPage() {
           `${process.env.NEXT_PUBLIC_API_URL}/api/upload-${template}`,
           {
             method: "POST",
+            credentials: "include",
             body: formData,
           },
         );
@@ -206,6 +207,8 @@ export default function UploadPage() {
                 <option value="">Pilih Jenis Template</option>
                 <option value="ami">Data AMI</option>
                 <option value="dil">Data DIL</option>
+                <option value="amr">Data AMR</option>
+                <option value="epm">Data EPM</option>
               </select>
             </div>
             <button
@@ -241,6 +244,9 @@ export default function UploadPage() {
                 <th className="px-4 py-3 text-left text-xs font-bold uppercase tracking-wider text-gray-500 bg-gray-50 border-b-2 border-gray-200">
                   Baris Diproses
                 </th>
+                <th className="px-4 py-3 text-left text-xs font-bold uppercase tracking-wider text-gray-500 bg-gray-50 border-b-2 border-gray-200">
+                  Di Unggah Oleh
+                </th>
               </tr>
             </thead>
             <tbody>
@@ -269,6 +275,9 @@ export default function UploadPage() {
                   </td>
                   <td className="px-4 py-3 text-sm text-gray-700 border-b border-gray-100">
                     {item.rows > 0 ? item.rows.toLocaleString() : "—"}
+                  </td>
+                  <td className="px-4 py-3 text-sm text-gray-700 border-b border-gray-100">
+                    {item.uploaded_by}
                   </td>
                 </tr>
               ))}

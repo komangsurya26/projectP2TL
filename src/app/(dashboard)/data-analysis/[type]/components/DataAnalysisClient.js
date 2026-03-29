@@ -65,8 +65,7 @@ export default function DataAnalysisPage() {
         return [
           { key: "id", label: "ID Pelanggan" },
           { key: "name", label: "Nama Pelanggan" },
-          { key: "meterNumber", label: "Nomor Meter" },
-          { key: "risk", label: "Skor Risiko" },
+          { key: "address", label: "Unit UP" },
           { key: "result", label: "Status" },
         ];
 
@@ -74,8 +73,7 @@ export default function DataAnalysisPage() {
         return [
           { key: "id", label: "ID Pelanggan" },
           { key: "name", label: "Nama Pelanggan" },
-          { key: "meterNumber", label: "Nomor Meter" },
-          { key: "risk", label: "Skor Risiko" },
+          { key: "address", label: "Unit UP" },
           { key: "result", label: "Status" },
         ];
       default:
