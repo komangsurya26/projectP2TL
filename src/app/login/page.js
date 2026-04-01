@@ -42,9 +42,7 @@ export default function LoginPage() {
 
   //jika user sudah login maka akan langsung diarahkan ke dashboard
   useEffect(() => {
-    if (user) {
-      router.push("/dashboard");
-    }
+    if (user) router.push("/dashboard");
   }, [user]);
 
   return (

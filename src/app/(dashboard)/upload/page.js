@@ -209,6 +209,7 @@ export default function UploadPage() {
                 <option value="dil">Data DIL</option>
                 <option value="amr">Data AMR</option>
                 <option value="epm">Data EPM</option>
+                <option value="prabayar">Data Prabayar</option>
               </select>
             </div>
             <button
