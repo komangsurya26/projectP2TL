@@ -210,6 +210,7 @@ export default function UploadPage() {
                 <option value="amr">Data AMR</option>
                 <option value="epm">Data EPM</option>
                 <option value="prabayar">Data Prabayar</option>
+                <option value="sorek">Data Sorek</option>
               </select>
             </div>
             <button
