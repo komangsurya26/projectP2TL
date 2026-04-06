@@ -27,6 +27,7 @@ export default function DataAnalysisPage() {
 
   const [search, setSearch] = useState("");
   const [resultFilter, setResultFilter] = useState("");
+  const [ulpFilter, setUlpFilter] = useState("");
   const [page, setPage] = useState(1);
   const [perPage, setPerPage] = useState(50);
   const [selectedCustomer, setSelectedCustomer] = useState(null);
@@ -38,7 +39,7 @@ export default function DataAnalysisPage() {
     const fetchCustomers = async () => {
       setLoading(true);
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/pelanggan?jenis_meter=${typeParam}&page=${page}&per_page=${perPage}&idpel=${search}&status=${resultFilter}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/api/pelanggan?jenis_meter=${typeParam}&page=${page}&per_page=${perPage}&idpel=${search}&status=${resultFilter}&ulp=${ulpFilter}`,
       );
 
       const json = await response.json();
@@ -49,7 +50,7 @@ export default function DataAnalysisPage() {
     };
 
     fetchCustomers();
-  }, [page, typeParam, perPage, search, resultFilter]);
+  }, [page, typeParam, perPage, search, resultFilter, ulpFilter]);
 
   useEffect(() => {
     setPage(1);
@@ -128,6 +129,22 @@ export default function DataAnalysisPage() {
         </div>
 
         <div className="flex flex-wrap items-center gap-3">
+          <select
+            className="px-3 py-2 border-[1.5px] border-gray-200 rounded-lg text-sm font-sans text-gray-600 bg-white cursor-pointer outline-none focus:border-electric-blue flex-1 md:flex-none"
+            value={ulpFilter}
+            onChange={(e) => {
+              setUlpFilter(e.target.value);
+              setPage(1);
+            }}
+          >
+            <option value="">Semua ULP</option>
+            <option value="DENPASAR">Denpasar</option>
+            <option value="KUTA">Kuta</option>
+            <option value="GIANYAR">Gianyar</option>
+            <option value="TABANAN">Tabanan</option>
+            <option value="MENGWI">Mengwi</option>
+            <option value="SINGARAJA">Singaraja</option>
+          </select>
           <select
             className="px-3 py-2 border-[1.5px] border-gray-200 rounded-lg text-sm font-sans text-gray-600 bg-white cursor-pointer outline-none focus:border-electric-blue flex-1 md:flex-none"
             value={resultFilter}
