@@ -54,7 +54,7 @@ export default function UploadPage() {
       return;
     }
     window.open(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/template-${template}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/template/${template}`,
       "_blank",
     );
   };
@@ -85,7 +85,7 @@ export default function UploadPage() {
         formData.append("totalChunks", totalChunks);
 
         const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/upload-${template}`,
+          `${process.env.NEXT_PUBLIC_API_URL}/api/upload/${template}`,
           {
             method: "POST",
             credentials: "include",
