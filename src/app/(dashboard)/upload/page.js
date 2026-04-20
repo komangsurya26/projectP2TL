@@ -70,7 +70,7 @@ export default function UploadPage() {
     setUploadStatus("processing");
 
     try {
-      const chunkSize = 5 * 1024 * 1024; // 5MB per chunk
+      const chunkSize = 10 * 1024 * 1024; // 10MB per chunk
       const totalChunks = Math.ceil(uploadedFile.size / chunkSize);
 
       for (let i = 0; i < totalChunks; i++) {
